@@ -7,9 +7,8 @@ spring:
             authorization-grant-type: authorization_code
             client-id: baea2cf9d9e01dd7788f24fb1626cf3d
             client-secret: QQQQQQQQQQQQQQQQuOfOLzjZMc5q1U
-            redirect-uri: "http://localhost:8080/oauth"
-            scope:
-              - profile
+            redirect-uri: http://localhost:8081/login/oauth2/code/kakao
+            scope: profile,account_email,age_range
             client-authentication-method: POST
             client-name: Kakao
 
