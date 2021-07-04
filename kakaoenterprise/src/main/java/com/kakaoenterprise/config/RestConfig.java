@@ -1,12 +1,12 @@
 package com.kakaoenterprise.config;
 
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.client.BufferingClientHttpRequestFactory;
 import org.springframework.http.client.SimpleClientHttpRequestFactory;
 import org.springframework.web.client.RestTemplate;
 
 import com.google.common.collect.Lists;
+import com.kakaoenterprise.interceptor.RestTemplateLoggingInterceptor;
 
 @Configuration
 public class RestConfig{

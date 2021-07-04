@@ -1,4 +1,4 @@
-package com.kakaoenterprise.config;
+package com.kakaoenterprise.interceptor;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 
@@ -20,7 +20,20 @@ public class RestTemplateLoggingInterceptor implements ClientHttpRequestIntercep
     @Override
     public ClientHttpResponse intercept(HttpRequest request, byte[] body, ClientHttpRequestExecution execution) throws IOException {
         loggingRequest(request, body);
-        ClientHttpResponse response = execution.execute(request, body);
+        ClientHttpResponse response = null;
+        try {
+        	response = execution.execute(request, body);
+        }catch (Exception e) {
+        	StringBuilder reqLog = new StringBuilder();
+        	reqLog.append("[REQUEST] Maker : ").append(marker);
+        	reqLog.append(" URI / Method   : ").append(request.getURI()).append("/").append(request.getMethod());
+        	reqLog.append(" Method         : ").append(request.getMethod());
+        	reqLog.append(" Headers        : ").append(request.getHeaders());
+        	reqLog.append(" Request body   : ").append(IOUtils.toString(body, StandardCharsets.UTF_8.name()));
+        	reqLog.append(" Error          : ").append(e.toString());
+        	log.error(reqLog.toString());
+        	throw e;
+		}
         loggingResponse(request, response);
         return response;
     }

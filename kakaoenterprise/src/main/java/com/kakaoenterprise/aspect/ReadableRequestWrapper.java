@@ -24,7 +24,8 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 
-import com.kakaoenterprise.config.RestTemplateLoggingInterceptor;
+import com.kakaoenterprise.interceptor.RestTemplateLoggingInterceptor;
+
 import org.apache.http.entity.ContentType;
 import lombok.extern.slf4j.Slf4j;
 
