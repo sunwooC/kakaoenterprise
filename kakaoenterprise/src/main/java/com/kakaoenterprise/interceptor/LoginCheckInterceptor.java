@@ -4,6 +4,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
@@ -16,7 +17,9 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 @Component
 public class LoginCheckInterceptor extends HandlerInterceptorAdapter {
-	private static final String[] allowedUris = new String[] { "/login.html","/api/v1/auth/local" ,"/login/join"};
+	@Value("${spring.security.oauth2.client.registration.kakao.redirect-uri}")
+	private String redirectUri;
+	private String[] allowedUris = new String[] { "/login.html","/api/v1/auth/local" ,"/api/auth/local/new","/login/oauth2/code/kakao"};
 
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
 			throws Exception {
