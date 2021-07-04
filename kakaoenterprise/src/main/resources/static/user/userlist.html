@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+<link rel="stylesheet" href="/css/material/vue-material.min.css">
+<link rel="stylesheet" href="/css/material/default.css">
+<link rel="stylesheet"
+	href="https://use.fontawesome.com/releases/v5.15.1/css/all.css">
+<script src="/js/vue25.js"></script>
+<script src="/js/materia/vue-material.min.js"></script>
+<script src="/js/axios.min.js"></script>
+
+<title>board</title>
+<style>
+.addBtn {
+	position: fixed;
+	bottom: 0;
+	right: 0;
+	font-size: 30px;
+	padding: 10px;
+	color: #f5b914;
+}
+
+i {
+	cursor: pointer;
+}
+
+.listTitle {
+	margin-bottom: 10px;
+	background-color: #f5b914;
+	font-weight: bold;
+	padding: 5px 0;
+}
+
+.listInner {
+	margin-bottom: 10px;
+	background-color: #dedede;
+	padding: 5px 0;
+}
+</style>
+</head>
+
+<body>
+	<div id="app">
+		<div style="max-width: 800px; margin: 10px;">
+
+
+
+			<div class="md-layout-item md-size-100">
+
+				<md-field> <label for="movies">연령대</label> <md-select
+					v-model="agerange" name="movies" id="movies">
+				<md-option value="">전체</md-option> <md-option value="10~19">10대</md-option>
+				<md-option value="20~29">20대</md-option> <md-option value="30~39">30대</md-option>
+				<md-option value="40~49">40대</md-option> <md-option value="50~59">50대</md-option>
+				<md-option value="60~">60대이상</md-option> </md-select> </md-field>
+
+
+				<md-field> <label for="search">이메일도메인</label> <md-input
+					v-model="domain" /> </md-field>
+				<div>
+					<button v-on:click="getData(0)">조회</button>
+					<button v-on:click="logOut()">로그아웃(로그인한 본인)</button>
+				</div>
+			</div>
+
+			<div class="md-layout">
+				<div class="md-layout-item md-size-100">
+
+					<div class="md-layout listTitle">
+						<div class="md-layout-item md-size-20 text-info">닉네임</div>
+						<div class="md-layout-item md-size-25 text-info">이메일</div>
+						<div class="md-layout-item md-size-10 text-info">가입시스템</div>
+						<div class="md-layout-item md-size-15 text-info">카카오조회</div>
+						<div class="md-layout-item md-size-10 text-info">수정(닉)</div>
+						<div class="md-layout-item md-size-10 text-info">토큰갱신</div>
+						<div class="md-layout-item md-size-5 text-info">연결끊기</div>
+						<div class="md-layout-item md-size-5 text-info">로그아웃</div>
+						<div class="md-layout-item md-size-5 text-info">삭제</div>
+					</div>
+
+					<div class="md-layout listInner"
+						v-for="(listItem, index) in displayData" :key="index">
+						<div class="md-layout-item md-size-20 text-info">{{
+							listItem.nickname }}</div>
+						<div class="md-layout-item md-size-25 text-info">{{
+							listItem.email }}</div>
+						<div class="md-layout-item md-size-10 text-info">{{
+							listItem.sysid }}</div>
+
+						<div class="md-layout-item md-size-15 text-info">
+							<i class="fas fa-glasses" @click="onReqUserInfo(index)"></i>
+						</div>
+
+						<div class="md-layout-item md-size-10 text-info">
+							<i class="fas fa-edit" @click="onEdit(index)"></i>
+						</div>
+						<div class="md-layout-item md-size-10 text-info">
+							<i class="fal fa-redo-alt" @click="onReaccessToekn(index)"></i> <!-- 토큰갱신 -->
+						</div>
+						<div class="md-layout-item md-size-5 text-info">
+							<i class="fad fa-cut" @click="onUnLink(index)"></i><!-- 연결끊기 -->
+						</div>
+						<div class="md-layout-item md-size-5 text-info">
+							<i class="fad fa-cut" @click="onUserLogout(index)"></i><!-- 연결끊기 -->
+						</div>
+						<div class="md-layout-item md-size-5 text-info">
+							<i class="fas fa-trash-alt" @click="onRemove(index)"></i>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div>
+				<i class="fas fa-plus-circle addBtn" @click="onAdd"></i>
+			</div>
+		</div>
+
+
+
+		<div class="md-layout">
+			<button v-on:click="getPrevData()"><</button>
+			{{ pageNumber }}
+			<button v-on:click="getNextData()">></button>
+		</div>
+
+		<!--
+            <div>
+                <md-dialog :md-active.sync="addDialog" @keydown.esc="closeDialog">
+                    <md-dialog-title>Add</md-dialog-title>
+
+                    <md-dialog-content>
+                        <md-field>
+                            <label for="subject">닉네임</label>
+                            <md-input v-model="newData.username" required />
+                        </md-field>
+
+                        <md-field>
+                            <label for="description">이메일</label>
+                            <md-input v-model="newData.email" @keydown.enter="submit" required />
+                        </md-field>
+                    </md-dialog-content>
+
+                    <md-dialog-actions>
+                        <md-button class="md-primary" @click="closeDialog">Close</md-button>
+                        <md-button class="md-primary" @click="submit">Save</md-button>
+                    </md-dialog-actions>
+                </md-dialog>
+-->
+		<md-dialog :md-active.sync="editDialog" @keydown.esc="closeDialog">
+		<md-dialog-title>Edit</md-dialog-title> <md-dialog-content>
+		<md-field> <label for="subject">닉네임</label> <md-input
+			v-model="selectedData.nickname" required /> </md-field> <md-field> <label
+			for="description">이메일</label> <md-input v-model="selectedData.email"
+			readonly /> </md-field> </md-dialog-content> <md-dialog-actions> <md-button
+			class="md-primary" @click="closeDialog">Close</md-button> <md-button
+			class="md-primary" @click="editedSubmit">Save</md-button> </md-dialog-actions> </md-dialog>
+
+		<md-dialog :md-active.sync="removeDialog" @keydown.esc="closeDialog"
+			@keydown.enter="removeData"> <md-dialog-title>Remove</md-dialog-title>
+
+		<md-dialog-content> 정말 삭제 하시겠습니까? </md-dialog-content> <md-dialog-actions>
+		<md-button class="md-primary" @click="closeDialog">Cancel</md-button>
+		<md-button class="md-primary" @click="removeData">Confirm</md-button>
+		</md-dialog-actions> </md-dialog>
+	</div>
+
+	</div>
+	</div>
+
+
+	<script>
+        Vue.use(VueMaterial.default);
+        //api 통신 대체용 test data
+        const testData = [{
+
+        }]
+
+        new Vue({
+            el: '#app',
+            data: {
+                addDialog: false,
+                editDialog: false,
+                removeDialog: false,
+                listData: [],
+                age_check: [],
+                search: '',
+                curSelecdtIndex: 0, //선택한 index
+                first: false,
+                second: false,
+				pageNumber : 0,
+                newData: {
+                    id: Number,
+                    nickname: '',
+                    email: ''
+                },
+                selectedMovies:[],
+                selectedData: {
+                    id: Number,
+                    nickname: '',
+                    email: '',
+                    sysid: ''
+                }
+                ,domain: ''
+                ,agerange: '',
+
+            },
+            created() {
+                this.listData = testData;
+            },
+
+            computed: {
+                //여기서 오타등의 에러가 났을 경우, toLowerCase function이 없다는 에러메시지 나옴
+                displayData() {
+                	return this.listData;
+                	/*
+                    if (this.search) {
+                        //listData filter 후, 검색한 데이터(결과값)를 listData에 할당
+                        this.searchedData = this.listData.filter(
+                            (data) => {
+                                return data.subject.toLowerCase().includes(this.search.toLowerCase());
+                            });
+
+                        return this.listData = this.searchedData;
+                    } else {
+                        //데이터가 없을 경우, 전체 리스트 출력
+                        return this.listData = testData;
+                    }
+                	*/
+                }
+            },
+
+            methods: {
+    			getData(pageNo){
+    				this.pageNumber = pageNo;
+    				var url = '/api/v1/users';
+    				url = url + '?page=' + this.pageNumber;
+    				url = url + '&size=10';
+    				url = url + '&domain='+this.domain;
+    				url = url + '&agerange='+this.agerange;
+    				axios.get(url)
+					.then(res => {
+						console.log(res.data.content);
+						this.listData.length = 0;
+						for (const item of res.data.content)
+						{ 
+							console.log(item)
+		                    this.listData.push(item);
+						}
+	                    this.addDialog = true;
+	                    this.addDialog = false;
+						}
+					)
+            		.catch(error => {
+						console.log(error);
+            				alert("조회에 실해하였습니다.");
+					});
+    			},      
+    			getPrevData(){
+    				this.getData(this.pageNumber - 1 );
+    			},     		
+    			getNextData(){
+    				this.getData(this.pageNumber + 1 );
+    			},        			
+                editedSubmit(index) {
+                    const editedData = {
+                        id: this.selectedData.id,
+                        nickname: this.selectedData.nickname,
+                        email: this.selectedData.email,
+                    }
+                    console.log(editedData);
+    				axios.post('/api/v1/user/'+this.selectedData.id,editedData)
+					.then(res => {
+						console.log(res);
+	                    this.listData.splice(this.curSelecdtIndex, 1, editedData);
+	                    alert("변경에 되었습니다.");
+	                    this.closeDialog();
+						}
+					)
+            		.catch(error => {
+						alert("변경에 실패하였습니다.");
+            		});
+                },
+                removeData() {
+                    //데이터 삭제: splice(해당 index, 갯수)
+    				axios.delete('/api/v1/user/'+this.selectedData.id)
+					.then(res => {
+						console.log(res);
+	                    this.listData.splice(this.curSelecdtIndex, 1);
+	                    this.removeDialog = false;
+	                    this.closeDialog();
+						}
+					).catch(error => {
+						alert("삭제에 실패하였습니다.");
+            		});
+					
+                },
+
+                onAdd() {
+                    this.addDialog = true;
+                },
+                onReqUserInfo(index){
+                    this.curSelecdtIndex = index;
+                    
+                    this.selectedData.id = this.listData[this.curSelecdtIndex].id;
+                    this.selectedData.sysid = this.listData[this.curSelecdtIndex].sysid;
+                    
+                	if( this.selectedData.sysid !== 'Kakao'){
+                		alert("kakao가입자만 가능합니다.");
+                		return ;
+                	}                    
+    				axios.get('/api/v2/user/me/'+this.selectedData.id)
+					.then(res => {
+						console.log(res.data);
+						alert(res);
+						}
+					).catch(error => {
+						console.log(error);
+						alert("실패:"+error);
+            		});
+                },
+                onReaccessToekn(index){
+                	this.curSelecdtIndex = index;
+                    this.selectedData.id = this.listData[this.curSelecdtIndex].id;
+                    this.selectedData.sysid = this.listData[this.curSelecdtIndex].sysid;
+                	if( this.selectedData.sysid !== 'Kakao'){
+                		alert("kakao가입자만 가능합니다.");
+                		return ;
+                	}
+       				axios.post('/api/v2/user/token/'+this.selectedData.id)
+   					.then(res => {
+   						console.log(res);
+   						alert("갱신된 토큰 : "+res.data.access_token);
+   						}
+   					)
+               		.catch(error => {
+               			alert("실패:"+error.response.data.message);
+               		});                	
+                },      
+                onUnLink(index){
+                	this.curSelecdtIndex = index;
+                    this.selectedData.id = this.listData[this.curSelecdtIndex].id;
+                    this.selectedData.sysid = this.listData[this.curSelecdtIndex].sysid;
+                	if( this.selectedData.sysid !== 'Kakao'){
+                		alert("kakao가입자만 가능합니다.");
+                		return ;
+                	}
+       				axios.delete('/api/v1/user/unlink/'+this.selectedData.id)
+   					.then(res => {
+   						console.log(res);
+   						alert("unlink 사용자 : "+res.data);
+   						}
+   					)
+               		.catch(error => {
+               			alert("실패:"+error.response.data.message);
+               		});                	
+                },                  
+                onUserLogout(index){
+                	this.curSelecdtIndex = index;
+                    this.selectedData.id = this.listData[this.curSelecdtIndex].id;
+                    this.selectedData.sysid = this.listData[this.curSelecdtIndex].sysid;
+                	if( this.selectedData.sysid !== 'Kakao'){
+                		alert("kakao가입자만 가능합니다.");
+                		return ;
+                	}
+       				axios.post('/api/v1/user/logout/'+this.selectedData.id)
+   					.then(res => {
+   						console.log(res);
+   						alert("logout 사용자 : "+res.data);
+   						}
+   					)
+               		.catch(error => {
+               			alert("실패:"+error.response.data.message);
+               		});                	
+                },                  
+
+                onEdit(index) {
+                    this.editDialog = true;
+                    this.curSelecdtIndex = index;
+                    this.selectedData.id = this.listData[this.curSelecdtIndex].id;
+                    this.selectedData.nickname = this.listData[this.curSelecdtIndex].nickname;
+                    this.selectedData.email = this.listData[this.curSelecdtIndex].email;
+                },
+                onRemove(index) {
+                    this.removeDialog = true;
+                    //현재 index번호를 보내주어야, removeDialog창에서 confirm 클릭후
+                    //해당 list를 지울수 있음
+                    this.curSelecdtIndex = index;
+                    this.selectedData.id = this.listData[this.curSelecdtIndex].id;
+                    this.selectedData.nickname = this.listData[this.curSelecdtIndex].nickname;
+                    this.selectedData.email = this.listData[this.curSelecdtIndex].email;
+                },
+                logOut(){
+                	this.curSelecdtIndex = index;
+                    this.selectedData.id = this.listData[this.curSelecdtIndex].id;
+                    this.selectedData.sysid = this.listData[this.curSelecdtIndex].sysid;
+                	if( this.selectedData.sysid !== 'Kakao'){
+                		alert("kakao가입자만 가능합니다.");
+                		return ;
+                	}
+       				axios.post('/api/v2/user/token/111')
+   					.then(res => {
+   						console.log(res);
+   						}
+   					)
+               		.catch(error => {
+   						alert("실패");
+               		});     
+                },
+                closeDialog() {
+                    this.addDialog = false;
+                    this.editDialog = false;
+                    this.removeDialog = false;
+                },
+
+                clearData(key) {
+                    for (let key in this.newData) {
+                        this.newData[key] = '';
+                    }
+                },
+            }
+        })
+    </script>
+</body>
+
+</html>

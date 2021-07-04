@@ -1,0 +1,44 @@
+html,
+body,
+#app {
+	padding: 0;
+	margin: 0;
+	height: 100%;
+	width: 100%;
+}
+#modal__btn {
+	display: inline-block;
+	margin: 10px;
+	border-radius: 20px;
+	box-shadow: #000 0px 0px 3px;
+	padding: 5px 20px;
+	cursor: pointer;
+	user-select: none;
+}
+#modal-bg {
+	position: fixed;
+	top: 0;
+	left: 0;
+	display: block;
+	height: 100%;
+	width: 100%;
+	background: #ddd;
+	opacity: 0.6;
+	z-index: 100;
+}
+#modal-box {
+	position: fixed;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	min-width: 500px;
+	min-height: 500px;
+	background: #fff;
+	z-index: 101;
+}
+#modal-status + #modal-wrap {
+	display: none;
+}
+#modal-status:checked + #modal-wrap {
+	display: initial;
+}
