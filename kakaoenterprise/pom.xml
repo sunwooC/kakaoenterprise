@@ -169,6 +169,20 @@
 			<plugin>
 				<artifactId>maven-resources-plugin</artifactId>
 				<version>2.6</version>
+                <executions>
+                    <execution>
+                        <id>another compile in package compile</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>compile</goal>
+                        </goals>
+                        <configuration>
+                            <verbose>true</verbose>
+                            <encoding>MS949</encoding>
+                        </configuration>
+                    </execution>
+                </executions>
+                <!--  
 				<executions>
 					<execution>
 						<id>copy-resources</id>
@@ -189,6 +203,7 @@
 						</configuration>
 					</execution>
 				</executions>
+					-->
 			</plugin>
 
 		</plugins>
