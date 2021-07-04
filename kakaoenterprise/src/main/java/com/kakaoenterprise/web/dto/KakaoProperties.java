@@ -9,11 +9,8 @@ import lombok.ToString;
 @NoArgsConstructor
 @ToString
 @Data
-public class KakaoAuthToken {
-	String token_type;
-	String access_token;
-	long expires_in;
-	String refresh_token;
-	long refresh_token_expires_in;
-	
+public class KakaoProperties {
+	private String nickname;
+	private String profile_image;
+	private String thumbnail_image;
 }

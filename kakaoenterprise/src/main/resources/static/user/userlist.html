@@ -45,7 +45,7 @@ i {
 
 <body>
 	<div id="app">
-		<div style="max-width: 800px; margin: 10px;">
+		<div style="max-width: 900px; margin: 10px;">
 
 
 
@@ -71,7 +71,7 @@ i {
 				<div class="md-layout-item md-size-100">
 
 					<div class="md-layout listTitle">
-						<div class="md-layout-item md-size-20 text-info">닉네임</div>
+						<div class="md-layout-item md-size-15 text-info">닉네임</div>
 						<div class="md-layout-item md-size-25 text-info">이메일</div>
 						<div class="md-layout-item md-size-10 text-info">가입시스템</div>
 						<div class="md-layout-item md-size-15 text-info">카카오조회</div>
@@ -84,7 +84,7 @@ i {
 
 					<div class="md-layout listInner"
 						v-for="(listItem, index) in displayData" :key="index">
-						<div class="md-layout-item md-size-20 text-info">{{
+						<div class="md-layout-item md-size-15 text-info">{{
 							listItem.nickname }}</div>
 						<div class="md-layout-item md-size-25 text-info">{{
 							listItem.email }}</div>
@@ -269,6 +269,7 @@ i {
                         id: this.selectedData.id,
                         nickname: this.selectedData.nickname,
                         email: this.selectedData.email,
+                        sysid: this.selectedData.sysid,
                     }
                     console.log(editedData);
     				axios.post('/api/v1/user/'+this.selectedData.id,editedData)
@@ -379,6 +380,7 @@ i {
                 onEdit(index) {
                     this.editDialog = true;
                     this.curSelecdtIndex = index;
+                    this.selectedData.sysid = this.listData[this.curSelecdtIndex].sysid;
                     this.selectedData.id = this.listData[this.curSelecdtIndex].id;
                     this.selectedData.nickname = this.listData[this.curSelecdtIndex].nickname;
                     this.selectedData.email = this.listData[this.curSelecdtIndex].email;

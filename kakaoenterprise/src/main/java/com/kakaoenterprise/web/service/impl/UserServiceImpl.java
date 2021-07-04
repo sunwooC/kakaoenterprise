@@ -1,4 +1,4 @@
-package com.kakaoenterprise.web.service;
+package com.kakaoenterprise.web.service.impl;
 
 import java.util.Optional;
 

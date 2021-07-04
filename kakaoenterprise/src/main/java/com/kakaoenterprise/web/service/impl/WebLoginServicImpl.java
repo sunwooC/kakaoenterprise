@@ -1,4 +1,4 @@
-package com.kakaoenterprise.web.service;
+package com.kakaoenterprise.web.service.impl;
 
 import javax.transaction.Transactional;
 
@@ -30,6 +30,15 @@ public class WebLoginServicImpl {
 		}
 		user.setRole(RoleType.USER);
 		user.setSysid("LOCAL");
+		userRepository.save(user);
+		return true;
+	}
+	@Transactional
+	public boolean merge(User user) {
+		User info = userRepository.findByUsername(user.getUsername());
+		if (info != null) {
+			user.setId(info.getId());
+		}
 		userRepository.save(user);
 		return true;
 	}

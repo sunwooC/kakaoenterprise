@@ -16,7 +16,7 @@ import com.kakaoenterprise.domain.user.User;
 import com.kakaoenterprise.web.dto.UserDto;
 import com.kakaoenterprise.web.dto.UserUpdateReqDto;
 import com.kakaoenterprise.web.service.UserService;
-import com.kakaoenterprise.web.service.UserServiceImpl;
+import com.kakaoenterprise.web.service.impl.UserServiceImpl;
 import com.sun.istack.NotNull;
 
 import io.swagger.annotations.ApiOperation;
