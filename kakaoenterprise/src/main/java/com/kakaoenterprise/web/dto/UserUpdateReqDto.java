@@ -6,6 +6,14 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+/**
+ * 사용자 정보 중 nickname를 변경하기 위한 DTO
+ * 
+ * @author sunwoo cho
+ * @date 2021.07.05
+ * @version 1.0
+ */
+
 @Getter
 @NoArgsConstructor
 public class UserUpdateReqDto {

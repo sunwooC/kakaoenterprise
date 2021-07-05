@@ -5,6 +5,13 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
+/**
+ * 카카오 정보 중 Properties 
+ * 
+ * @author sunwoo cho
+ * @date 2021.07.05
+ * @version 1.0
+ */
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString

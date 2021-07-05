@@ -1,10 +1,17 @@
 package com.kakaoenterprise.web.exception;
 
+import org.springframework.http.HttpStatus;
+
 import lombok.Getter;
 import lombok.ToString;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatus.Series;
 
+/**
+ * API 코드 정릴 enum
+ * 
+ * @author sunwoo cho
+ * @date 2021.07.05
+ * @version 1.0
+ */
 @Getter
 @ToString
 public enum ExceptionEnum {

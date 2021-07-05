@@ -6,6 +6,13 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+/**
+ * 조회된 User에 대해 클라이언트로 전달할 DTO
+ * 
+ * @author sunwoo cho
+ * @date 2021.07.05
+ * @version 1.0
+ */
 @Getter
 @NoArgsConstructor
 public class UserDto {

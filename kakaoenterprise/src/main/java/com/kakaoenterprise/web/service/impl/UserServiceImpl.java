@@ -21,59 +21,95 @@ public class UserServiceImpl  {
 	@Autowired
 	private UserRepository userRepository;
 
-
 	
     /**
-     * 카카오 사용자 정보 조회(Admin Key로)하는 기능
-     * @param snsid 조회하고자 하는 사용자의 카카오번호
-     * @return 응답내용 반환
+     * 로컬 및 카카오로 가입된 사용자 정보 조회 페이징 기능
+     * @param Pageable 조회하고자 하는 데이터의 정렬 및 페이징 정의
+     * @return Pageable에서 정의한 범위 데이터 반환
      */
-	//@Override
 	public Page<UserDto> findAll(Pageable pageable) {
 		Page<User> users = userRepository.findAll(pageable);
 		return users.map(UserDto::new);
 	}
-
-	//@Override
+	
+    /**
+     * 로컬 및 카카오로 가입된 사용자 정보 조회(연려댕) 페이징 기능
+     * @param agerang 연령대 (10~19)
+     * @param Pageable 조회하고자 하는 데이터의 정렬 및 페이징 정의
+     * @return Pageable에서 정의한 범위 데이터 반환
+     */
 	public Page<UserDto> findbyAgerange(String agerang, Pageable pageable) {
 		Page<User> users = userRepository.findByAgerange(agerang, pageable);
 		return users.map(UserDto::new);
 	}
-
-	//@Override
+	
+    /**
+     * 로컬 및 카카오로 가입된 사용자 정보 조회(도메인) 페이징 기능
+     * @param daomin 이메일의 뒷 부분
+     * @param Pageable 조회하고자 하는 데이터의 정렬 및 페이징 정의
+     * @return Pageable에서 정의한 범위 데이터 반환
+     */
 	public Page<UserDto> findByEmailEndingWith(String daomin, Pageable pageable) {
 		Page<User> users = userRepository.findByEmailEndingWith(daomin, pageable);
 		return users.map(UserDto::new);
 	}
 
-	//@Override
+
+    /**
+     * 로컬 및 카카오로 가입된 사용자 정보 조회(도메인+연령대) 페이징 기능
+     * @param agerang 연령대 (10~19)
+     * @param daomin 이메일의 뒷 부분
+     * @param Pageable 조회하고자 하는 데이터의 정렬 및 페이징 정의
+     * @return Pageable에서 정의한 범위 데이터 반환
+     */
 	public Page<UserDto> findByEmailEndingWithAndAgerange(String agerang, String daomin, Pageable pageable) {
 		Page<User> users = userRepository.findByEmailEndingWithAndAgerange(daomin, agerang, pageable);
 		return users.map(UserDto::new);
 	}
 
-	//@Override
+	/**
+	 * 로컬 및 카카오로 가입된 사용자 정보를 고유ID로 조회 
+	 * @param id 유저정보의 ID
+	 * @return 사용자 정보
+	 */
 	public User findById(Long id) {
 		Optional<User> user = userRepository.findById(id);
 		return user.orElse(null);
 	}
 
-	//@Override
-	public void update(UserUpdateReqDto account) {
-		userRepository.update(account.getNickname(), account.getId());
+	/**
+	 * 로컬 및 카카오로 가입된 사용자 정보를 고유ID에 대해 nickname변경
+	 * @param account 업데이트 대사장의 정보(nickname만) 
+	 * @return 업데이트된 카운트
+	 */
+	public int update(UserUpdateReqDto account) {
+		return userRepository.update(account.getNickname(), account.getId());
+	}
+	
+	/**
+	 * 로컬 및 카카오로 가입된 사용자 정보를중 snsid에 대해 삭제
+	 * @param id 고유ID
+	 * @return 삭제된 카운트
+	 */
+	public int deleteBySnsid(Long id) {
+		return userRepository.deleteBySnsid(id);
 	}
 
-	//@Override
-	public void deleteBySnsid(Long id) {
-		userRepository.deleteBySnsid(id);
-	}
-
-	//@Override
+	/**
+	 * 로컬 및 카카오로 가입된 사용자 정보를 고유ID에 대해 삭제
+	 * @param id 고유ID
+	 * @return 삭제된 카운트
+	 */
 	public void deleteById(Long id) {
 		userRepository.deleteById(id);
 	}
-	public void Save(User user) {
-		userRepository.save(user);
+	/**
+	 * 로컬 및 카카오로 가입된 사용자 정보를 저장,변경하
+	 * @param user 사용자의 저장하고자하는 정보
+	 * @return 정장된 사용자 정보
+	 */
+	public User Save(User user) {
+		return userRepository.save(user);
 	}
 	
 

@@ -11,24 +11,29 @@ import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
-import java.util.stream.Stream;
 import java.util.stream.Collectors;
-import org.apache.commons.io.IOUtils;
-import org.apache.commons.lang3.StringUtils;
+
 import javax.servlet.ReadListener;
 import javax.servlet.ServletInputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletRequestWrapper;
 
+import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang3.StringUtils;
+import org.apache.http.entity.ContentType;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 
-import com.kakaoenterprise.interceptor.RestTemplateLoggingInterceptor;
-
-import org.apache.http.entity.ContentType;
 import lombok.extern.slf4j.Slf4j;
 
+/**
+ * HttpServletRequest에 대한 Wrapper 클래스로 Body내용을 일력으로 남기는 기능
+ * 
+ * @author sunwo.cho
+ * @date 2021.07.05
+ * @version 1.0
+ */
 @Slf4j
 public class ReadableRequestWrapper extends HttpServletRequestWrapper { // 상속
 	private final Charset encoding;
@@ -51,20 +56,21 @@ public class ReadableRequestWrapper extends HttpServletRequestWrapper { // 상�
 			if (StringUtils.isEmpty(collect)) { // body 가 없을경우 로깅 제외
 				return;
 			}
-			if (request.getContentType() != null && request.getContentType().contains(
-				ContentType.MULTIPART_FORM_DATA.getMimeType())) { // 파일 업로드시 로깅제외
+			if (request.getContentType() != null
+					&& request.getContentType().contains(ContentType.MULTIPART_FORM_DATA.getMimeType())) { // 파일 업로드시
+																											// 로깅제외
 				return;
 			}
 			JSONParser jsonParser = new JSONParser();
 			Object parse = jsonParser.parse(collect);
 			if (parse instanceof JSONArray) {
-				JSONArray jsonArray = (JSONArray)jsonParser.parse(collect);
+				JSONArray jsonArray = (JSONArray) jsonParser.parse(collect);
 				setParameter("requestBody", jsonArray.toJSONString());
 			} else {
-				JSONObject jsonObject = (JSONObject)jsonParser.parse(collect);
+				JSONObject jsonObject = (JSONObject) jsonParser.parse(collect);
 				Iterator iterator = jsonObject.keySet().iterator();
 				while (iterator.hasNext()) {
-					String key = (String)iterator.next();
+					String key = (String) iterator.next();
 					setParameter(key, jsonObject.get(key).toString().replace("\"", "\\\""));
 				}
 			}
@@ -106,7 +112,7 @@ public class ReadableRequestWrapper extends HttpServletRequestWrapper { // 상�
 	}
 
 	public void setParameter(String name, String value) {
-		String[] param = {value};
+		String[] param = { value };
 		setParameter(name, param);
 	}
 
@@ -137,7 +143,6 @@ public class ReadableRequestWrapper extends HttpServletRequestWrapper { // 상�
 			public int read() {
 				return byteArrayInputStream.read();
 			}
-
 
 		};
 	}

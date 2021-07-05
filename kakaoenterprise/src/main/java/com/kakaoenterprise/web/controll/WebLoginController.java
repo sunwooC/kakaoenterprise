@@ -3,31 +3,21 @@ package com.kakaoenterprise.web.controll;
 import java.io.IOException;
 import java.math.BigInteger;
 import java.security.MessageDigest;
-import java.util.HashMap;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.util.LinkedMultiValueMap;
-import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.client.RestTemplate;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
-import com.kakaoenterprise.config.RestConfig;
 import com.kakaoenterprise.domain.user.RoleType;
 import com.kakaoenterprise.domain.user.User;
-import com.kakaoenterprise.interceptor.LoginCheckInterceptor;
 import com.kakaoenterprise.web.dto.AuthJoinReqDto;
 import com.kakaoenterprise.web.dto.KaKaoUserInfo;
 import com.kakaoenterprise.web.dto.KakaoAuthToken;
@@ -35,17 +25,26 @@ import com.kakaoenterprise.web.dto.UserLoginDto;
 import com.kakaoenterprise.web.exception.ApiException;
 import com.kakaoenterprise.web.exception.ExceptionEnum;
 import com.kakaoenterprise.web.service.impl.KakaoUserServiceImpl;
+import com.kakaoenterprise.web.service.impl.RedisUserImpl;
 import com.kakaoenterprise.web.service.impl.WebLoginServicImpl;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+/**
+ * Local 및 카카오 가입자에 대한 로그인 처리
+ * 
+ * @author sunwoo cho
+ * @date 2021.07.05
+ * @version 1.0
+ */
 @Slf4j
 @RequiredArgsConstructor
 @RestController
 public class WebLoginController {
 	private final WebLoginServicImpl userImpl;
 	private final KakaoUserServiceImpl kakaoUserServiceImpl;
+	private final RedisUserImpl redisUserImpl;
 
 	@RequestMapping("/api/v1/auth/local")
 	public ResponseEntity login(@RequestBody UserLoginDto user) {
@@ -59,14 +58,13 @@ public class WebLoginController {
 		}
 		// return "/user/userlist";
 		HttpSession session = getCurrentUserAccount();
-		session.setAttribute("userInfo", info);
-
+		session.setAttribute("sessionId", info.getId());
+		session.setAttribute("sessionUserName", user.getUsername());
 		return new ResponseEntity<>(1, HttpStatus.OK);
-	}
+	}	
 
 	@RequestMapping("/api/auth/local/new")
 	public ResponseEntity join(@RequestBody AuthJoinReqDto authJoinReqDto) {
-
 		authJoinReqDto.setPassword(ecodeing(authJoinReqDto.getPassword()));
 		boolean result = userImpl.join(authJoinReqDto.toEntity());
 		if (result != true) {
@@ -118,7 +116,10 @@ public class WebLoginController {
 				.sysid("Kakao").role(RoleType.USER).build();
 		userImpl.merge(user);
 		HttpSession session = getCurrentUserAccount();
-		session.setAttribute("userInfo", user);
+		session.setAttribute("sessionId", user.getId());
+		session.setAttribute("sessionUserName", user.getUsername());
+		redisUserImpl.login(user.getUsername(),session.getId());
+		
 		response.sendRedirect("/user/userlist.html");
 		return new ResponseEntity<>(1, HttpStatus.OK);
 	}

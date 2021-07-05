@@ -13,13 +13,19 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
 import com.kakaoenterprise.config.RestConfig;
-import com.kakaoenterprise.web.controll.WebLoginController;
 import com.kakaoenterprise.web.dto.KaKaoUserInfo;
 import com.kakaoenterprise.web.dto.KakaoAuthToken;
-import com.kakaoenterprise.web.repository.UserRepository;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+
+/**
+ * 카카오 사용자 로그인 처리
+ * 
+ * @author sunwoo cho
+ * @date 2021.07.05
+ * @version 1.0
+ */
 
 @Slf4j
 @RequiredArgsConstructor

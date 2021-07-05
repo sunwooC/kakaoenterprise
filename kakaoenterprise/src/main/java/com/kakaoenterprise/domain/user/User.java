@@ -1,6 +1,5 @@
 package com.kakaoenterprise.domain.user;
 
-
 import java.io.Serializable;
 import java.sql.Timestamp;
 
@@ -21,12 +20,19 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+/**
+ * local가입자 및 카카오 가입자의 Entity
+ * 
+ * @author sunwo.cho
+ * @date 2021.07.05
+ * @version 1.0
+ */
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
 @Builder
-public class User implements Serializable{
+public class User implements Serializable {
 	static final long serialVersionUID = 4136285672735957787L;
 	@Id // Primary key
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -42,7 +48,7 @@ public class User implements Serializable{
 	private String email;
 
 	@Column(nullable = false, length = 100)
-	private String nickname; //사용자가 변경가능한 부분
+	private String nickname; // 사용자가 변경가능한 부분
 
 	@Column(nullable = true)
 	private Long snsid; //
@@ -58,30 +64,19 @@ public class User implements Serializable{
 
 	@Column(nullable = true)
 	private Integer agegrop; //
-	
+
 	@Column(nullable = true, length = 60)
 	private String refreshToken; //
-	
+
 	@Column(nullable = true, length = 60)
 	private String accessToekn; //
 
-
-	
 	@CreationTimestamp
 	private Timestamp createDate;
 
 	public UserDto convertToAccountResDto() {
-		return UserDto.builder()
-				.nickname(this.nickname)
-				.email(this.email)
-				.id(this.id)
-				.agerange(this.agerange)
-				.agegrop(agegrop)
-				.refreshToken(refreshToken)
-				.accessToekn(accessToekn)
-				.sysid(sysid)
-				.build();
+		return UserDto.builder().nickname(this.nickname).email(this.email).id(this.id).agerange(this.agerange)
+				.agegrop(agegrop).refreshToken(refreshToken).accessToekn(accessToekn).sysid(sysid).build();
 	}
-
 
 }

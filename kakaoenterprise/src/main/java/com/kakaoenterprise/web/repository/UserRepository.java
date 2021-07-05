@@ -9,7 +9,13 @@ import org.springframework.data.repository.query.Param;
 
 import com.kakaoenterprise.domain.user.User;
 
-
+/**
+ * 사용자 정보를 생성,변경, 삭제하는 기능
+ * 
+ * @author sunwoo cho
+ * @date 2021.07.05
+ * @version 1.0
+ */
 public interface UserRepository extends JpaRepository<User, Long> {
 
 	public User findByUsername(String username);
@@ -20,7 +26,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
 	@Modifying
 	@Query("delete from User b where b.snsid=:snsid")
-	void deleteBySnsid(@Param("snsid") Long snsid);
+	int deleteBySnsid(@Param("snsid") Long snsid);
 
 	public Page<User> findByAgerange(String arerang, Pageable pageable);
 

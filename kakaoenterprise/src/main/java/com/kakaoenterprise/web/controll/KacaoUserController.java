@@ -1,7 +1,6 @@
 package com.kakaoenterprise.web.controll;
 
-import java.util.List;
-
+import javax.servlet.http.HttpServletRequest;
 import javax.transaction.Transactional;
 
 import org.springframework.http.HttpStatus;
@@ -17,32 +16,33 @@ import com.kakaoenterprise.web.dto.KakaoAuthToken;
 import com.kakaoenterprise.web.exception.ApiException;
 import com.kakaoenterprise.web.exception.ExceptionEnum;
 import com.kakaoenterprise.web.service.impl.KakaoServiceImpl;
+import com.kakaoenterprise.web.service.impl.RedisUserImpl;
 import com.kakaoenterprise.web.service.impl.UserServiceImpl;
 
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-
-
 @Slf4j
 @RequiredArgsConstructor
 @RestController
 /**
- * - 사용자 정보 조회 (#req-user-info)
- * - 로그아웃 (#logout)
- * - 연결끊기 (#unlink)
+ * - 사용자 정보 조회 (#req-user-info) 
+ * - 로그아웃 (#logout) 
+ * - 연결끊기 (#unlink) 
  * - 토큰갱신 (#refresh-token)
  * 
  * @author sunwoo cho
+ * @date 2021.07.05
+ * @version 1.0
  */
 public class KacaoUserController {
 	/*
-	@Autowired
-	private SessionRegistry sessionRegistry;
+	 * @Autowired private SessionRegistry sessionRegistry;
 	 */
 	private final KakaoServiceImpl kakaoServiceImpl;
 	private final UserServiceImpl userServiceImpl;
+	private final RedisUserImpl redisUserImpl;
 
 	@ApiOperation(value = "Id로 카카오 사용자를 조회하는 기능", notes = "Id는 내부 DB정보")
 	@GetMapping("/api/v2/user/me/{id}")
@@ -85,35 +85,24 @@ public class KacaoUserController {
 		String snsid = user.getUsername().replace("Kakao_", "");
 		ResponseEntity<String> result = kakaoServiceImpl.unlinkAdmin(snsid);
 		if (result.getStatusCode() == HttpStatus.OK) {
-			/*
 			userServiceImpl.deleteById(user.getId());
-			List list = sessionRegistry.getAllPrincipals();
-			for (Object item : sessionRegistry.getAllPrincipals()) {
-				System.out.println(item);
-			}
-			*/
+			redisUserImpl.logout(user.getUsername());
 		}
 		return result;
 	}
-	
+
 	@Transactional
-	@ApiOperation(value = "Id로 사용자연결끊기", notes = "Id는 내부 DB정보")
+	@ApiOperation(value = "Id로 사용자로그아웃", notes = "Id는 내부 DB정보")
 	@PostMapping("/api/v1/user/logout/{id}")
-	public ResponseEntity<String> logout(@PathVariable(required = true) String id) {
+	public ResponseEntity<String> logout(HttpServletRequest req, @PathVariable(required = true) String id) {
 		User user = userServiceImpl.findById(Long.parseLong(id));
 		if (user == null || !"Kakao".equals(user.getSysid())) {
 			throw new ApiException(ExceptionEnum.NOT_FOUND_USER);
 		}
 		String snsid = user.getUsername().replace("Kakao_", "");
-		ResponseEntity<String> result = kakaoServiceImpl.logoutAdmin(snsid);
+		ResponseEntity<String> result = kakaoServiceImpl.logout(user.getAccessToekn());
 		if (result.getStatusCode() == HttpStatus.OK) {
-			/*
-			userServiceImpl.deleteById(user.getId());
-			List list = sessionRegistry.getAllPrincipals();
-			for (Object item : sessionRegistry.getAllPrincipals()) {
-				System.out.println(item);
-			}
-			*/
+			redisUserImpl.logout(user.getUsername());
 		}
 		return result;
 	}

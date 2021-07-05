@@ -7,7 +7,7 @@
 <meta http-equiv="X-UA-Compatible" content="ie=edge">
 <link rel="stylesheet" href="/css/material/vue-material.min.css">
 <link rel="stylesheet" href="/css/material/default.css">
-<link rel="stylesheet"
+<link rel="stylesheet"`
 	href="https://use.fontawesome.com/releases/v5.15.1/css/all.css">
 <script src="/js/vue25.js"></script>
 <script src="/js/materia/vue-material.min.js"></script>
@@ -52,9 +52,9 @@ i {
 			<div class="md-layout-item md-size-100">
 
 				<md-field> <label for="movies">연령대</label> <md-select
-					v-model="agerange" name="movies" id="movies">
-				<md-option value="">전체</md-option> <md-option value="10~19">10대</md-option>
-				<md-option value="20~29">20대</md-option> <md-option value="30~39">30대</md-option>
+					v-model="agerange" name="movies" id="movies"> <md-option
+					value="">전체</md-option> <md-option value="10~19">10대</md-option> <md-option
+					value="20~29">20대</md-option> <md-option value="30~39">30대</md-option>
 				<md-option value="40~49">40대</md-option> <md-option value="50~59">50대</md-option>
 				<md-option value="60~">60대이상</md-option> </md-select> </md-field>
 
@@ -63,7 +63,7 @@ i {
 					v-model="domain" /> </md-field>
 				<div>
 					<button v-on:click="getData(0)">조회</button>
-					<button v-on:click="logOut()">로그아웃(로그인한 본인)</button>
+					<button v-on:click="mylogOut()">로그아웃(로그인한 본인)</button>
 				</div>
 			</div>
 
@@ -99,13 +99,16 @@ i {
 							<i class="fas fa-edit" @click="onEdit(index)"></i>
 						</div>
 						<div class="md-layout-item md-size-10 text-info">
-							<i class="fal fa-redo-alt" @click="onReaccessToekn(index)"></i> <!-- 토큰갱신 -->
+							<i class="fal fa-redo-alt" @click="onReaccessToekn(index)"></i>
+							<!-- 토큰갱신 -->
 						</div>
 						<div class="md-layout-item md-size-5 text-info">
-							<i class="fad fa-cut" @click="onUnLink(index)"></i><!-- 연결끊기 -->
+							<i class="fad fa-cut" @click="onUnLink(index)"></i>
+							<!-- 연결끊기 -->
 						</div>
 						<div class="md-layout-item md-size-5 text-info">
-							<i class="fad fa-cut" @click="onUserLogout(index)"></i><!-- 연결끊기 -->
+							<i class="fad fa-cut" @click="onUserLogout(index)"></i>
+							<!-- 연결끊기 -->
 						</div>
 						<div class="md-layout-item md-size-5 text-info">
 							<i class="fas fa-trash-alt" @click="onRemove(index)"></i>
@@ -161,7 +164,7 @@ i {
 		<md-dialog :md-active.sync="removeDialog" @keydown.esc="closeDialog"
 			@keydown.enter="removeData"> <md-dialog-title>Remove</md-dialog-title>
 
-		<md-dialog-content> 정말 삭제 하시겠습니까? </md-dialog-content> <md-dialog-actions>
+		<md-dialog-content> 삭제 하시겠습니까? </md-dialog-content> <md-dialog-actions>
 		<md-button class="md-primary" @click="closeDialog">Cancel</md-button>
 		<md-button class="md-primary" @click="removeData">Confirm</md-button>
 		</md-dialog-actions> </md-dialog>
@@ -394,6 +397,7 @@ i {
                     this.selectedData.nickname = this.listData[this.curSelecdtIndex].nickname;
                     this.selectedData.email = this.listData[this.curSelecdtIndex].email;
                 },
+                /*
                 logOut(){
                 	this.curSelecdtIndex = index;
                     this.selectedData.id = this.listData[this.curSelecdtIndex].id;
@@ -410,6 +414,10 @@ i {
                		.catch(error => {
    						alert("실패");
                		});     
+                },
+                */
+                mylogOut(){
+                	
                 },
                 closeDialog() {
                     this.addDialog = false;

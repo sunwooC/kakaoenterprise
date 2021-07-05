@@ -11,6 +11,13 @@ import com.kakaoenterprise.web.repository.UserRepository;
 
 import lombok.RequiredArgsConstructor;
 
+/**
+ * 웹로그인시 로그인 관련 사용자 정보를 조회 및 생성,변경하는 기능
+ * 
+ * @author sunwoo cho
+ * @date 2021.07.05
+ * @version 1.0
+ */
 @RequiredArgsConstructor
 @Service
 @Transactional

@@ -26,10 +26,12 @@ import lombok.extern.slf4j.Slf4j;
 	
 
 /**
- * 카카오 요청 처리 Impl
+ * 카카오 사용자 정보 조회,로그아웃,로그인 기능 담당
+ * 
  * @author sunwoo cho
+ * @date 2021.07.05
+ * @version 1.0
  */
-
 @Slf4j
 @Service
 @Transactional

@@ -6,6 +6,13 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+/**
+ * 로그인시 사용되는 DTO
+ * 
+ * @author sunwoo cho
+ * @date 2021.07.05
+ * @version 1.0
+ */
 @Getter
 @NoArgsConstructor
 public class UserLoginDto {

@@ -9,7 +9,14 @@ import com.kakaoenterprise.web.controll.WebLoginController;
 import javax.servlet.http.HttpServletRequest;
 import java.nio.file.AccessDeniedException;
 
-@RestControllerAdvice(basePackageClasses = WebLoginController.class)
+/**
+ * API 예외처리를 위한 공통 예외 Advice
+ * 
+ * @author sunwoo cho
+ * @date 2021.07.05
+ * @version 1.0
+ */
+@RestControllerAdvice(basePackages="com.kakaoenterprise.web")
 public class ApiExceptionAdvice {
     @ExceptionHandler({ApiException.class})
     public ResponseEntity<ApiExceptionEntity> exceptionHandler(HttpServletRequest request, final ApiException e) {

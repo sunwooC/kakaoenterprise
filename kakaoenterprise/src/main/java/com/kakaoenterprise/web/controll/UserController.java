@@ -15,15 +15,21 @@ import org.springframework.web.bind.annotation.RestController;
 import com.kakaoenterprise.domain.user.User;
 import com.kakaoenterprise.web.dto.UserDto;
 import com.kakaoenterprise.web.dto.UserUpdateReqDto;
-import com.kakaoenterprise.web.service.UserService;
 import com.kakaoenterprise.web.service.impl.UserServiceImpl;
 import com.sun.istack.NotNull;
 
-import io.swagger.annotations.ApiOperation;
-import lombok.RequiredArgsConstructor;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
+import io.swagger.annotations.ApiOperation;
+import lombok.RequiredArgsConstructor;
 
+/**
+ * local 및 카카오 사용자를 함께 조회 변경
+ * 
+ * @author sunwoo cho
+ * @date 2021.07.05
+ * @version 1.0
+ */
 @RequiredArgsConstructor
 @RestController
 public class UserController {
@@ -71,6 +77,5 @@ public class UserController {
 		userService.deleteById(id);
 		return new ResponseEntity<>(1, HttpStatus.OK);
 	}
-	
 
 }

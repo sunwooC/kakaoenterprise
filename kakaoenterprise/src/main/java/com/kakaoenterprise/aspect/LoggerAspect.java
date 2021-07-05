@@ -7,11 +7,9 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
-import org.aspectj.lang.annotation.Before;
 import org.aspectj.lang.annotation.Pointcut;
 import org.json.simple.JSONObject;
 import org.springframework.stereotype.Component;
@@ -20,6 +18,13 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 
 import lombok.extern.slf4j.Slf4j;
 
+/**
+ * AOP로 Controller에 대해 이력을 남김
+ * 
+ * @author sunwo.cho
+ * @date 2021.07.05
+ * @version 1.0
+ */
 @Component
 @Aspect
 @Slf4j
