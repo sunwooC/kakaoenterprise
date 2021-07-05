@@ -15,11 +15,13 @@ import com.kakaoenterprise.web.dto.UserUpdateReqDto;
 import com.kakaoenterprise.web.repository.UserRepository;
 import com.kakaoenterprise.web.service.UserService;
 
+import lombok.RequiredArgsConstructor;
+
 @Service
 @Transactional
+@RequiredArgsConstructor
 public class UserServiceImpl  {
-	@Autowired
-	private UserRepository userRepository;
+	private final UserRepository userRepository;
 
 	
     /**
@@ -63,7 +65,7 @@ public class UserServiceImpl  {
      * @return Pageable에서 정의한 범위 데이터 반환
      */
 	public Page<UserDto> findByEmailEndingWithAndAgerange(String agerang, String daomin, Pageable pageable) {
-		Page<User> users = userRepository.findByEmailEndingWithAndAgerange(daomin, agerang, pageable);
+		Page<User> users = userRepository.findByEmailEndingWithAndAgerange(agerang, daomin, pageable);
 		return users.map(UserDto::new);
 	}
 

@@ -93,6 +93,7 @@ public class KakaoServiceImpl {
      * @param snsid 조회하고자 하는 사용자의 카카오번호
      * @return 응답내용 반환
      */
+	/*
 	public ResponseEntity<KaKaoUserInfo> postUserMe(String snsid) {
 		RestTemplate rt = restConfig.restTemplate(this.getClass().getName());
 		HttpHeaders headers = new HttpHeaders();
@@ -102,6 +103,7 @@ public class KakaoServiceImpl {
 		ResponseEntity<KaKaoUserInfo> response = rt.exchange(userMeUri, HttpMethod.POST, req, KaKaoUserInfo.class);
 		return response;
 	}
+	*/
 	
     /**
      * 카카오 사용자 정보 조회(Admin Key로)하는 기능

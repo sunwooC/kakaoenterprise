@@ -32,7 +32,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
 	 */
 	@Query(value = "UPDATE User u SET u.nickname = :nickname WHERE u.id = :id", nativeQuery = false)
 	@Modifying
-	public Integer update(String nickname, Long id);
+	public int update(String nickname, Long id);
 
 	/**
 	 * @Method Name  : deleteBySnsid
@@ -82,6 +82,6 @@ public interface UserRepository extends JpaRepository<User, Long> {
 	 * @param pageable
 	 * @return
 	 */
-	public Page<User> findByEmailEndingWithAndAgerange(String daomin, String arerang, Pageable pageable);
+	public Page<User> findByEmailEndingWithAndAgerange(String arerang, String daomin, Pageable pageable);
 
 }
