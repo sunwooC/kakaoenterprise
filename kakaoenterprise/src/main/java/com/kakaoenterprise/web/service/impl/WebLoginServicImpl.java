@@ -24,11 +24,29 @@ import lombok.RequiredArgsConstructor;
 public class WebLoginServicImpl {
 	private final UserRepository userRepository;
 
+	/**
+	 * @Method Name  : loadUserByUsername
+	 * @작성일   : 2021. 7. 5.
+	 * @작성자   : User1
+	 * @변경이력  :
+	 * @Method 설명 :
+	 * @param user
+	 * @return
+	 */
 	public User loadUserByUsername(UserLoginDto user) {
 		User info = userRepository.findByUsername(user.getUsername());
 		return info;
 	}
 	
+	/**
+	 * @Method Name  : join
+	 * @작성일   : 2021. 7. 5.
+	 * @작성자   : User1
+	 * @변경이력  :
+	 * @Method 설명 :
+	 * @param user
+	 * @return
+	 */
 	@Transactional
 	public boolean join(User user) {
 		User info = userRepository.findByUsername(user.getUsername());
@@ -40,6 +58,15 @@ public class WebLoginServicImpl {
 		userRepository.save(user);
 		return true;
 	}
+	/**
+	 * @Method Name  : merge
+	 * @작성일   : 2021. 7. 5.
+	 * @작성자   : User1
+	 * @변경이력  :
+	 * @Method 설명 :
+	 * @param user
+	 * @return
+	 */
 	@Transactional
 	public boolean merge(User user) {
 		User info = userRepository.findByUsername(user.getUsername());

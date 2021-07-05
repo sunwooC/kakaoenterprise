@@ -46,6 +46,15 @@ public class WebLoginController {
 	private final KakaoUserServiceImpl kakaoUserServiceImpl;
 	private final RedisUserImpl redisUserImpl;
 
+	/**
+	 * @Method Name  : login
+	 * @작성일   : 2021. 7. 5.
+	 * @작성자   : User1
+	 * @변경이력  :
+	 * @Method 설명 :
+	 * @param user
+	 * @return
+	 */
 	@RequestMapping("/api/v1/auth/local")
 	public ResponseEntity login(@RequestBody UserLoginDto user) {
 		User info = userImpl.loadUserByUsername(user);
@@ -63,6 +72,15 @@ public class WebLoginController {
 		return new ResponseEntity<>(1, HttpStatus.OK);
 	}	
 
+	/**
+	 * @Method Name  : join
+	 * @작성일   : 2021. 7. 5.
+	 * @작성자   : User1
+	 * @변경이력  :
+	 * @Method 설명 :
+	 * @param authJoinReqDto
+	 * @return
+	 */
 	@RequestMapping("/api/auth/local/new")
 	public ResponseEntity join(@RequestBody AuthJoinReqDto authJoinReqDto) {
 		authJoinReqDto.setPassword(ecodeing(authJoinReqDto.getPassword()));
@@ -73,6 +91,15 @@ public class WebLoginController {
 		return new ResponseEntity<>(1, HttpStatus.OK);
 	}
 
+	/**
+	 * @Method Name  : ecodeing
+	 * @작성일   : 2021. 7. 5.
+	 * @작성자   : User1
+	 * @변경이력  :
+	 * @Method 설명 :
+	 * @param password
+	 * @return
+	 */
 	public String ecodeing(String password) {
 		String ecodeing = "";
 		try {
@@ -84,6 +111,14 @@ public class WebLoginController {
 		return ecodeing;
 	}
 
+	/**
+	 * @Method Name  : getCurrentUserAccount
+	 * @작성일   : 2021. 7. 5.
+	 * @작성자   : User1
+	 * @변경이력  :
+	 * @Method 설명 :
+	 * @return
+	 */
 	public HttpSession getCurrentUserAccount() {
 		ServletRequestAttributes servletRequestAttribute = (ServletRequestAttributes) RequestContextHolder
 				.currentRequestAttributes();
@@ -91,6 +126,18 @@ public class WebLoginController {
 		return httpSession;
 	}
 
+	/**
+	 * @Method Name  : callback
+	 * @작성일   : 2021. 7. 5.
+	 * @작성자   : User1
+	 * @변경이력  :
+	 * @Method 설명 :
+	 * @param response
+	 * @param code
+	 * @param error
+	 * @return
+	 * @throws IOException
+	 */
 	@GetMapping("/login/oauth2/code/kakao")
 	public ResponseEntity callback(HttpServletResponse response,String code, String error) throws IOException {
 		ResponseEntity<KakaoAuthToken> reesutl = kakaoUserServiceImpl.postOauthToken(code);

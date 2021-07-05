@@ -20,14 +20,34 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 @Service
 public class RedisUserImpl {
+	/**
+	 * 
+	 */
 	@Autowired
 	private RedisConfig redisConfig;
 
+	/**
+	 * @Method Name  : login
+	 * @작성일   : 2021. 7. 5.
+	 * @작성자   : User1
+	 * @변경이력  :
+	 * @Method 설명 :
+	 * @param username
+	 * @param sessionId
+	 */
 	public void login(String username, String sessionId) {
 		RedisTemplate redisTemplate = redisConfig.redisTemplate();
 		redisTemplate.opsForHash().put("LOGIN:USER:ID", username, sessionId);
 	}
 
+	/**
+	 * @Method Name  : logout
+	 * @작성일   : 2021. 7. 5.
+	 * @작성자   : User1
+	 * @변경이력  :
+	 * @Method 설명 :
+	 * @param username
+	 */
 	public void logout(String username) {
 		RedisTemplate redisTemplate = redisConfig.redisTemplate();
 		String session = (String) redisTemplate.opsForHash().get("LOGIN:USER:ID", username);

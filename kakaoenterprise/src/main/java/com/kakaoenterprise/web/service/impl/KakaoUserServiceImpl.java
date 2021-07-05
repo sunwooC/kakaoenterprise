@@ -81,6 +81,15 @@ public class KakaoUserServiceImpl {
 	private final RestConfig restConfig;
 
 
+	/**
+	 * @Method Name  : postOauthToken
+	 * @작성일   : 2021. 7. 5.
+	 * @작성자   : User1
+	 * @변경이력  :
+	 * @Method 설명 :
+	 * @param code
+	 * @return
+	 */
 	public ResponseEntity<KakaoAuthToken>  postOauthToken(String code) {
 		RestTemplate rt = restConfig.restTemplate("aaaa");
 		HttpHeaders headers = new HttpHeaders();
@@ -95,6 +104,15 @@ public class KakaoUserServiceImpl {
 		log.info("{}", response.getBody());
 		return response;
 	}
+	/**
+	 * @Method Name  : postUserMe
+	 * @작성일   : 2021. 7. 5.
+	 * @작성자   : User1
+	 * @변경이력  :
+	 * @Method 설명 :
+	 * @param token
+	 * @return
+	 */
 	public ResponseEntity<KaKaoUserInfo> postUserMe(KakaoAuthToken token) {
 		RestTemplate rt = restConfig.restTemplate("");
 		HttpHeaders headers = new HttpHeaders();

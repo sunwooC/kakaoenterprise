@@ -36,6 +36,17 @@ public class UserController {
 
 	private final UserServiceImpl userService;
 
+	/**
+	 * @Method Name  : list
+	 * @작성일   : 2021. 7. 5.
+	 * @작성자   : User1
+	 * @변경이력  :
+	 * @Method 설명 :
+	 * @param agerange
+	 * @param domain
+	 * @param pageable
+	 * @return
+	 */
 	@ApiOperation(value = "전체 회원 검색", notes = "폐이징 및 정렬기능")
 	@ApiImplicitParams({
 			@ApiImplicitParam(name = "agerange", dataType = "string", paramType = "query", value = "연령대 10~19"),
@@ -60,6 +71,16 @@ public class UserController {
 		return new ResponseEntity<>(posts, HttpStatus.OK);
 	}
 
+	/**
+	 * @Method Name  : update
+	 * @작성일   : 2021. 7. 5.
+	 * @작성자   : User1
+	 * @변경이력  :
+	 * @Method 설명 :
+	 * @param id
+	 * @param userUpdateReqDto
+	 * @return
+	 */
 	@ApiOperation(value = "Id로 회줭정보 수정", notes = "로컬정만 변경")
 	@PostMapping("/api/v1/user/{id}")
 	public ResponseEntity<?> update(@PathVariable int id, @RequestBody UserUpdateReqDto userUpdateReqDto) {
@@ -67,6 +88,15 @@ public class UserController {
 		return new ResponseEntity<>(1, HttpStatus.OK);
 	}
 
+	/**
+	 * @Method Name  : deleteId
+	 * @작성일   : 2021. 7. 5.
+	 * @작성자   : User1
+	 * @변경이력  :
+	 * @Method 설명 :
+	 * @param id
+	 * @return
+	 */
 	@ApiOperation(value = "Id로 회줭정보 삭제", notes = "카카오 가입자는 연결끊기까지 처리")
 	@DeleteMapping("/api/v1/user/{id}")
 	public ResponseEntity<?> deleteId(@PathVariable Long id) {

@@ -44,6 +44,15 @@ public class KacaoUserController {
 	private final UserServiceImpl userServiceImpl;
 	private final RedisUserImpl redisUserImpl;
 
+	/**
+	 * @Method Name  : reqUserInfo
+	 * @작성일   : 2021. 7. 5.
+	 * @작성자   : User1
+	 * @변경이력  :
+	 * @Method 설명 :
+	 * @param id
+	 * @return
+	 */
 	@ApiOperation(value = "Id로 카카오 사용자를 조회하는 기능", notes = "Id는 내부 DB정보")
 	@GetMapping("/api/v2/user/me/{id}")
 	public ResponseEntity<String> reqUserInfo(@PathVariable(required = true) Long id) {
@@ -56,6 +65,15 @@ public class KacaoUserController {
 		return kaKaoUserInfo;
 	}
 
+	/**
+	 * @Method Name  : updateToken
+	 * @작성일   : 2021. 7. 5.
+	 * @작성자   : User1
+	 * @변경이력  :
+	 * @Method 설명 :
+	 * @param id
+	 * @return
+	 */
 	@Transactional
 	@ApiOperation(value = "Id로 사용자의 토큰을 갱신", notes = "Id는 내부 DB정보")
 	@PostMapping("/api/v2/user/token/{id}")
@@ -74,6 +92,15 @@ public class KacaoUserController {
 		return result;
 	}
 
+	/**
+	 * @Method Name  : unlink
+	 * @작성일   : 2021. 7. 5.
+	 * @작성자   : User1
+	 * @변경이력  :
+	 * @Method 설명 :
+	 * @param id
+	 * @return
+	 */
 	@Transactional
 	@ApiOperation(value = "Id로 사용자연결끊기", notes = "Id는 내부 DB정보")
 	@DeleteMapping("/api/v1/user/unlink/{id}")
@@ -91,6 +118,16 @@ public class KacaoUserController {
 		return result;
 	}
 
+	/**
+	 * @Method Name  : logout
+	 * @작성일   : 2021. 7. 5.
+	 * @작성자   : User1
+	 * @변경이력  :
+	 * @Method 설명 :
+	 * @param req
+	 * @param id
+	 * @return
+	 */
 	@Transactional
 	@ApiOperation(value = "Id로 사용자로그아웃", notes = "Id는 내부 DB정보")
 	@PostMapping("/api/v1/user/logout/{id}")
