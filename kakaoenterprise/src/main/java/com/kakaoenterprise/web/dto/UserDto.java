@@ -23,8 +23,8 @@ public class UserDto {
 	private String snsid;
 	private String sysid;
 	private Integer agegrop;
-	private String refreshToken;
-	private String accessToekn;
+	//private String refreshToken;
+	//private String accessToekn;
 	
 	@Builder
 	public UserDto(Long id, String nickname, String email, String agerange, String snsid, String sysid, Integer agegrop,String refreshToken,String accessToekn) {
@@ -35,8 +35,8 @@ public class UserDto {
 		this.snsid  = snsid;
 		this.sysid  = sysid;
 		this.agegrop  = agegrop;
-		this.refreshToken  = refreshToken;
-		this.accessToekn  = accessToekn;
+		//this.refreshToken  = refreshToken;
+		//this.accessToekn  = accessToekn;
 
 	}
 
@@ -48,8 +48,8 @@ public class UserDto {
 		this.snsid = user.getNickname();
 		this.sysid = user.getSysid();
 		this.agegrop = user.getAgegrop();
-		this.refreshToken = user.getRefreshToken();
-		this.accessToekn = user.getAccessToekn();
+		//this.refreshToken = user.getRefreshToken();
+		//this.accessToekn = user.getAccessToekn();
 
 	}
 }

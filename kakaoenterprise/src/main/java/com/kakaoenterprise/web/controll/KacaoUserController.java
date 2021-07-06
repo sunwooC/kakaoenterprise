@@ -50,9 +50,9 @@ public class KacaoUserController {
 	/**
 	 * @Method Name  : reqUserInfo
 	 * @작성일   : 2021. 7. 5.
-	 * @작성자   : User1
+	 * @작성자   : 조선우
 	 * @변경이력  :
-	 * @Method 설명 :
+	 * @Method 설명 :카카오로 부터 사용자를 조회하는 기능
 	 * @param id
 	 * @return
 	 */
@@ -71,7 +71,7 @@ public class KacaoUserController {
 	/**
 	 * @Method Name  : updateToken
 	 * @작성일   : 2021. 7. 5.
-	 * @작성자   : User1
+	 * @작성자   : 조선우
 	 * @변경이력  :
 	 * @Method 설명 :
 	 * @param id
@@ -98,9 +98,9 @@ public class KacaoUserController {
 	/**
 	 * @Method Name  : unlink
 	 * @작성일   : 2021. 7. 5.
-	 * @작성자   : User1
+	 * @작성자   : 조선우
 	 * @변경이력  :
-	 * @Method 설명 :
+	 * @Method 설명 :ID로 사용자의 연결을 끊는 기능
 	 * @param id
 	 * @return
 	 */
@@ -119,6 +119,7 @@ public class KacaoUserController {
 			String sessionId = redisUserImpl.logout(user.getUsername());
 			boolean logoutCheck = logout(sessionId);
 		}
+		
 		return result;
 	}
 	/**

@@ -1,5 +1,7 @@
 package com.kakaoenterprise.web.dto;
 
+import javax.validation.constraints.NotBlank;
+
 import com.kakaoenterprise.domain.user.User;
 
 import lombok.Data;
@@ -13,10 +15,13 @@ import lombok.Data;
  */
 @Data
 public class AuthJoinReqDto {
+	@NotBlank(message = "User Id는 필수 입니다.")
 	private String username;
 	private String nickname;
+	@NotBlank(message = "패스워드는 필수 입니다.")
 	private String password;
 	private String email;
+	@NotBlank(message = "나이 범위는 필수 입니다.")
 	private String agerange;
 
 	public User toEntity() {

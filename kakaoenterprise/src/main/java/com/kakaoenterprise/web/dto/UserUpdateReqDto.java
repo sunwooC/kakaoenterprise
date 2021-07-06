@@ -1,5 +1,7 @@
 package com.kakaoenterprise.web.dto;
 
+import javax.validation.constraints.NotBlank;
+
 import com.kakaoenterprise.domain.user.User;
 
 import lombok.Builder;
@@ -17,7 +19,9 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 public class UserUpdateReqDto {
+	@NotBlank(message = "Local id(연번)입니다.")
 	private Long id;
+	@NotBlank(message = "닉네임은 필수 입니다.")
 	private String nickname;
 
 	@Builder

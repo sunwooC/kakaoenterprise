@@ -3,12 +3,16 @@ package com.kakaoenterprise.web.controll;
 import java.io.IOException;
 import java.math.BigInteger;
 import java.security.MessageDigest;
+import java.util.List;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import javax.validation.Valid;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -60,14 +64,14 @@ public class WebLoginController {
 	 * @return
 	 */
 	@RequestMapping("/api/v1/auth/local")
-	public ResponseEntity login(@RequestBody UserLoginDto user) {
+	public ResponseEntity login(@RequestBody @Valid UserLoginDto user,BindingResult result) {
+		if(result.hasErrors()){
+			return new ResponseEntity<>(new Message(result.getAllErrors().get(0).getDefaultMessage()), HttpStatus.BAD_REQUEST);
+		}		
+		
 		User info = userImpl.loadUserByUsername(user);
 		if (info == null) {
-			throw new ApiException(ExceptionEnum.NOT_FOUND_USER);
-		}
-		String password = ecodeing(user.getPassword());
-		if (!password.equals(info.getPassword())) {
-			throw new ApiException(ExceptionEnum.NOT_MATCHED_USER);
+			return new ResponseEntity<>(new Message(ExceptionEnum.NOT_FOUND_USER.getMessage()), HttpStatus.BAD_REQUEST);
 		}
 		// return "/user/userlist";
 		HttpSession session = getCurrentUserAccount(true);
@@ -79,14 +83,18 @@ public class WebLoginController {
 	/**
 	 * @Method Name  : join
 	 * @작성일   : 2021. 7. 5.
-	 * @작성자   : User1
+	 * @작성자   : 조선우
 	 * @변경이력  :
-	 * @Method 설명 : 로그인
+	 * @Method 설명 : 신규 사용자를 등록하는 기능
 	 * @param authJoinReqDto 로그인 사용자의 정보
-	 * @return
+	 * @param result 휴요값 인증 처리
+	 * @return 신규 생성 결과 
 	 */
 	@RequestMapping("/api/v1/auth/local/new")
-	public ResponseEntity join(@RequestBody AuthJoinReqDto authJoinReqDto) {
+	public ResponseEntity join(@RequestBody @Valid AuthJoinReqDto authJoinReqDto,BindingResult result) {
+		if(result.hasErrors()){
+			throw new ApiException(ExceptionEnum.NOT_INPUT_DATA,result.getAllErrors().get(0).getDefaultMessage());
+		}
 		authJoinReqDto.setPassword(ecodeing(authJoinReqDto.getPassword()));
 		User user = userImpl.join(authJoinReqDto.toEntity());
 		if (user == null ) {
@@ -95,16 +103,16 @@ public class WebLoginController {
 		return new ResponseEntity<>(new Message("join"), HttpStatus.OK);
 	}
 	/**
-	 * @Method Name  : join
+	 * @Method Name  : logout
 	 * @작성일   : 2021. 7. 5.
-	 * @작성자   : User1
+	 * @작성자   : 조선우
 	 * @변경이력  :
-	 * @Method 설명 : 로그아웃
+	 * @Method 설명 : 현재 사용자의 세션을 종료시ㅣ는 기능
 	 * @return
 	 * @throws IOException 
 	 */
 	@DeleteMapping("/api/v1/auth/local")
-	public ResponseEntity logout(HttpServletResponse response) throws IOException {
+	public ResponseEntity logout() throws IOException {
 		HttpSession session = getCurrentUserAccount(false);
 		if (session == null) {
 			return new ResponseEntity<>(1, HttpStatus.OK);
@@ -126,13 +134,13 @@ public class WebLoginController {
 	/**
 	 * @Method Name  : ecodeing
 	 * @작성일   : 2021. 7. 5.
-	 * @작성자   : User1
+	 * @작성자   : 조선우
 	 * @변경이력  :
 	 * @Method 설명 : SHA-256 암호화
 	 * @param password 패스워드
 	 * @return
 	 */
-	public String ecodeing(String password) {
+	private String ecodeing(String password) {
 		String ecodeing = "";
 		try {
 			MessageDigest md = MessageDigest.getInstance("SHA-256");
@@ -146,7 +154,7 @@ public class WebLoginController {
 	/**
 	 * @Method Name  : getCurrentUserAccount
 	 * @작성일   : 2021. 7. 5.
-	 * @작성자   : User1
+	 * @작성자   : 조선우
 	 * @변경이력  :
 	 * @Method 설명 : 세션정보를 반환
 	 * @return sessionChk : 값에 따라 세션 생성 여부 결정
@@ -161,7 +169,7 @@ public class WebLoginController {
 	/**
 	 * @Method Name  : callback
 	 * @작성일   : 2021. 7. 5.
-	 * @작성자   : User1
+	 * @작성자   : 조선우
 	 * @변경이력  :
 	 * @Method 설명 : 카카오 oauth로그인 처리
 	 * @param response 로그인 관련 처리
@@ -174,11 +182,14 @@ public class WebLoginController {
 	public ResponseEntity callback(HttpServletResponse response,String code, String error) throws IOException {
 		ResponseEntity<KakaoAuthToken> reesutl = kakaoUserServiceImpl.postOauthToken(code);
 		if (reesutl.getStatusCode() != HttpStatus.OK) {
-
+			log.error("[LOGIN.CODE]statusL{},eror:{}",reesutl.getStatusCode(),error);
+			return new ResponseEntity<>(new Message("카카오로부터 CODE를 받지 못함."), HttpStatus.BAD_REQUEST);
 		}
 		KakaoAuthToken tonek = reesutl.getBody();
 		ResponseEntity<KaKaoUserInfo> resUseMe = kakaoUserServiceImpl.postUserMe(tonek);
 		if (resUseMe.getStatusCode() != HttpStatus.OK) {
+			log.error("[LOGIN.UESR_US]statusL{},eror:{}",reesutl.getStatusCode(),error);
+			throw new ApiException(ExceptionEnum.NOT_FOUND_USER);
 
 		}
 		KaKaoUserInfo oAuth2UserInfo = resUseMe.getBody();
@@ -199,9 +210,8 @@ public class WebLoginController {
 		session.setAttribute("sessionId", user.getId().toString());
 		session.setAttribute("sessionUserName", user.getUsername());
 		redisUserImpl.login(user.getUsername(),session.getId());
-		
 		response.sendRedirect("/user/userlist.html");
-		return new ResponseEntity<>(1, HttpStatus.OK);
+		return new ResponseEntity<>(new Message("login"), HttpStatus.OK);
 	}
 
 }

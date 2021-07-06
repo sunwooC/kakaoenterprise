@@ -1,6 +1,9 @@
 package com.kakaoenterprise.web.dto;
 
+import javax.validation.constraints.NotBlank;
+
 import com.kakaoenterprise.domain.user.User;
+import com.kakaoenterprise.web.exception.ExceptionEnum;
 
 import lombok.Builder;
 import lombok.Getter;
@@ -16,7 +19,9 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 public class UserLoginDto {
+	@NotBlank(message = "UserId는 필수 입니다.")
 	private String username;
+	@NotBlank(message = "패스워드는 필수 입니다.")
 	private String password;
 
 	@Builder

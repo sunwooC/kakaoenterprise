@@ -85,18 +85,17 @@ i {
 								<label for="email">이메일</label> <md-input v-model="newData.email" required />
 							</md-field>
 					
-							<md-field>
 								<label for="argrange">연령대</label>
-								<md-select v-model="newData.argrange" name="age" id="age">
-									<md-option value="0">9세 이하</md-option>
-									<md-option value="10">10대</md-option>
-									<md-option value="20">20대</md-option>
-									<md-option value="30">30대</md-option>
-									<md-option value="40">40대</md-option>
-									<md-option value="50">50대</md-option>
-									<md-option value="60">60대이상</md-option>
-								</md-select>
-					        </md-field>
+								<select v-model="newData.argrange" name="age" id="age">
+									<option value="0~9">9세 이하</option>
+									<option value="10~19">10대</option>
+									<option value="20~29">20대</option>
+									<option value="30~39">30대</option>
+									<option value="40~49">40대</option>
+									<option value="50~59">50대</option>
+									<option value="60~">60대이상</option>
+								</select>
+					     
 				
 							<md-field> 
 								<label for="password">패스원</label> <md-input type="password" v-model="newData.password" @keydown.enter="submit" required /> 
@@ -164,7 +163,7 @@ i {
 						}
 					)
             		.catch(error => {
-						alert("ID/PW를 확인하세요.");
+						alert(error.response.data.message);
             		});
     			},
     			onKakao(){
@@ -179,6 +178,7 @@ i {
                     		email: this.newData.email,
                     		argrange: this.newData.argrange,
                         };
+
     				axios.post('/api/v1/auth/local/new',joinData)
 					.then(res => {
 							if(res.data.message === "join"){
