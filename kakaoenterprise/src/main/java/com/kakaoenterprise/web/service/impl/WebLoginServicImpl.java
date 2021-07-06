@@ -2,6 +2,7 @@ package com.kakaoenterprise.web.service.impl;
 
 import javax.transaction.Transactional;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import com.kakaoenterprise.domain.user.RoleType;
@@ -23,7 +24,6 @@ import lombok.RequiredArgsConstructor;
 @Transactional
 public class WebLoginServicImpl {
 	private final UserRepository userRepository;
-
 	/**
 	 * @Method Name  : loadUserByUsername
 	 * @작성일   : 2021. 7. 5.

@@ -27,7 +27,8 @@ public class LoginCheckInterceptor extends HandlerInterceptorAdapter {
 	@Value("${spring.security.oauth2.client.registration.kakao.redirect-uri}")
 	private String redirectUri;
 	private String[] allowedUris = new String[] { "/login.html", "/api/v1/auth/local", "/api/v1/auth/local/new",
-			"/login/oauth2/code/kakao" };
+			"/login/oauth2/code/kakao","/login/oauth2/kakao/url"		
+	};
 
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
 			throws Exception {
@@ -36,6 +37,7 @@ public class LoginCheckInterceptor extends HandlerInterceptorAdapter {
 		if (session != null) {
 			if (uriPath.equals("/login.html") || uriPath.equals("/")) {
 				response.sendRedirect(request.getContextPath() + "/user/userlist.html");
+				
 			}
 		}
 		for (String url : allowedUris) {

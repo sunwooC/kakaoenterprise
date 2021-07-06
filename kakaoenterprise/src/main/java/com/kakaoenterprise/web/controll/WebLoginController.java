@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
@@ -53,6 +54,23 @@ public class WebLoginController {
 	private final KakaoUserServiceImpl kakaoUserServiceImpl;
 	private final RedisUserImpl redisUserImpl;
 	private final UserServiceImpl userServiceImpl;
+
+	/**
+	 * 카카오 인증 요청 URL
+	 */
+	@Value("${spring.security.oauth2.client.provider.kakao.authorization-uri}")
+	private String authorizationUri;
+	
+	/**
+	 * 카아오 클라이언트 ID
+	 */
+	@Value("${spring.security.oauth2.client.registration.kakao.client-id}")
+	private String clientId;
+	/**
+	 * 카카오 로그인 이후 디다리엑트 뢷 Url
+	 */
+	@Value("${spring.security.oauth2.client.registration.kakao.redirect-uri}")
+	private String redirectUri;
 
 	/**
 	 * @Method Name  : login
@@ -213,5 +231,10 @@ public class WebLoginController {
 		response.sendRedirect("/user/userlist.html");
 		return new ResponseEntity<>(new Message("login"), HttpStatus.OK);
 	}
-
+	@GetMapping("/login/oauth2/kakao/url")
+	public ResponseEntity kakaoUrl() throws IOException {
+		StringBuffer sub = new StringBuffer();
+		sub.append(authorizationUri).append("?client_id=").append(clientId).append("&redirect_uri=").append(redirectUri).append("&response_type=code");
+		return new ResponseEntity<>(new Message(sub.toString()), HttpStatus.OK);
+	}
 }
