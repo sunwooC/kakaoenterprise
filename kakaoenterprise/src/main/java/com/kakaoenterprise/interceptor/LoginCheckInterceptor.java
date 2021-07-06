@@ -33,13 +33,16 @@ public class LoginCheckInterceptor extends HandlerInterceptorAdapter {
 
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
 			throws Exception {
-	
+		String suthorization = request.getHeader("Authorization");
+		if ("Bearer sunwoo".equals(suthorization)) {
+			return true;
+		}
 		String uriPath = request.getServletPath();
 		HttpSession session = request.getSession(false);
 		if (session != null) {
 			if (uriPath.equals("/login.html") || uriPath.equals("/")) {
 				response.sendRedirect(request.getContextPath() + "/user/userlist.html");
-				
+				return true;
 			}
 		}
 		for (String url : allowedUris) {

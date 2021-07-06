@@ -2,6 +2,7 @@ package com.kakaoenterprise;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.scheduling.annotation.EnableScheduling;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -14,6 +15,7 @@ import lombok.extern.slf4j.Slf4j;
  */
 @Slf4j
 @SpringBootApplication
+@EnableScheduling
 public class KakaoenterpriseApplication {
 	/**
 	 * 메인 함수가 있는 곳으로 프로그램 시작접

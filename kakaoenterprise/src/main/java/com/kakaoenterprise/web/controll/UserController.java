@@ -76,7 +76,7 @@ public class UserController {
 			@ApiImplicitParam(name = "agerange", dataType = "string", paramType = "query", value = "연령대 10~19"),
 			@ApiImplicitParam(name = "domain", dataType = "string", paramType = "query", value = "이메일도메인 like %'kakaoenterprise.com'"),
 			@ApiImplicitParam(name = "size", dataType = "integer", paramType = "query", value = "페이지당 수"),
-			@ApiImplicitParam(name = "sort", allowMultiple = true, dataType = "string", paramType = "query", value = "정렬형식 agerange.asc-=email.desc 형태") })
+			@ApiImplicitParam(name = "sort", allowMultiple = true, dataType = "string", paramType = "query", value = "정렬형식 agerange.asc-email.desc 형태") })
 	@GetMapping("/api/v1/users")
 	public ResponseEntity<Page<UserDto>> list(
 			@RequestParam(value = "agerange", required = false, defaultValue = "") String agerange,
@@ -135,6 +135,7 @@ public class UserController {
 	 * @return
 	 */
 	@ApiOperation(value = "로컬 Id로 회줭정보 수정", notes = "로컬정만 변경")
+	@ApiImplicitParam(name="id",value="로컬 ID", required = true )
 	@PostMapping("/api/v1/user/{id}")
 	public ResponseEntity<?> update(@PathVariable int id
 			, @RequestBody  @Valid UserUpdateReqDto userUpdateReqDto,BindingResult result) {
@@ -154,7 +155,8 @@ public class UserController {
 	 * @param id
 	 * @return
 	 */
-	@ApiOperation(value = "로컬 Id로 회줭정보 삭제", notes = "카카오 가입자는 연결끊기까지 처리")
+	@ApiOperation(value = "로컬 Id로 회원정보 삭제", notes = "카카오 가입자는 연결끊기까지 처리")
+	@ApiImplicitParam(name="id",value="로컬 ID", required = true )
 	@DeleteMapping("/api/v1/user/{id}")
 	public ResponseEntity<?> deleteId(@PathVariable Long id) {
 		User user = userService.findById(id);

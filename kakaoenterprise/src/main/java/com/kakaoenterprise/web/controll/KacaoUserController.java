@@ -31,6 +31,7 @@ import com.kakaoenterprise.web.service.impl.KakaoServiceImpl;
 import com.kakaoenterprise.web.service.impl.RedisUserImpl;
 import com.kakaoenterprise.web.service.impl.UserServiceImpl;
 
+import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -78,7 +79,7 @@ public class KacaoUserController {
 	}
 	
 	
-	public ResponseEntity<?> update(@PathVariable int id
+	public ResponseEntity<Message> update(@PathVariable int id
 			, @RequestBody  @Valid UserUpdateReqDto userUpdateReqDto,BindingResult result) {
 		if(result.hasErrors()){
 			return new ResponseEntity<>(new Message(""), HttpStatus.BAD_REQUEST);
@@ -100,7 +101,7 @@ public class KacaoUserController {
 	@Transactional
 	@ApiOperation(value = "로컬 Id로 사용자의 토큰을 갱신", notes = "Id는 내부 DB정보")
 	@PostMapping("/api/v2/user/token/{id}")
-	public ResponseEntity<?> updateToken(@PathVariable(required = true) Long id) {
+	public ResponseEntity<Message> updateToken(@PathVariable(required = true) Long id) {
 		User user = userServiceImpl.findById(id);
 		if (user == null || !"Kakao".equals(user.getSysid())) {
 			return new ResponseEntity<>(new Message(ExceptionEnum.NOT_KAKO_USER.getMessage()), HttpStatus.BAD_REQUEST);
@@ -126,8 +127,9 @@ public class KacaoUserController {
 	 */
 	@Transactional
 	@ApiOperation(value = "로컬 Id로 사용자연결끊기", notes = "Id는 내부 DB정보")
+	@ApiImplicitParam(name="id",value="로컬 ID", required = true )
 	@DeleteMapping("/api/v1/user/unlink/{id}")
-	public ResponseEntity<?> unlink(@PathVariable(required = true) String id) {
+	public ResponseEntity<Message> unlink(@PathVariable(required = true) String id) {
 		User user = userServiceImpl.findById(Long.parseLong(id));
 		if (user == null || !"Kakao".equals(user.getSysid())) {
 			return new ResponseEntity<>(new Message(ExceptionEnum.NOT_KAKO_USER.getMessage()), HttpStatus.BAD_REQUEST);
@@ -172,9 +174,10 @@ public class KacaoUserController {
 	 * @return
 	 */
 	@Transactional
-	@ApiOperation(value = "로컬 Id로 사용자로그아웃", notes = "Id는 내부 DB정보")
+	@ApiOperation(value = "로컬 Id로 사용자연결끊기", notes = "Id는 내부 DB정보")
+	@ApiImplicitParam(name="id",value="로컬 ID", required = true )
 	@PostMapping("/api/v1/user/logout/{id}")
-	public ResponseEntity<?> logout(HttpServletRequest req, @PathVariable(required = true) String id) {
+	public ResponseEntity<Message> logout(HttpServletRequest req, @PathVariable(required = true) String id) {
 		User user = userServiceImpl.findById(Long.parseLong(id));
 		if (user == null || !"Kakao".equals(user.getSysid())) {
 			return new ResponseEntity<>(new Message(ExceptionEnum.NOT_FOUND_USER.getMessage()), HttpStatus.BAD_REQUEST);
