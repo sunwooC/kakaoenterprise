@@ -2,6 +2,7 @@ package com.kakaoenterprise.web.dto;
 
 import com.kakaoenterprise.domain.user.User;
 
+import io.swagger.annotations.ApiParam;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -16,27 +17,27 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 public class UserDto {
+	@ApiParam(value = "User Idf로 로그인시 사용", required = false, example = "h1212")
 	private Long id;
+	@ApiParam(value = "닉네임", required = false, example = "하이하이")
 	private String nickname;
+	@ApiParam(value = "email", required = false, example = "email이나 형식은 무관합니다.")
 	private String email;
+	@ApiParam(value = "연령대", required = false, example = "10~19")
 	private String agerange;
+	@ApiParam(value = "SNS시스템 의 고유값", required = false, example = "123")
 	private String snsid;
+	@ApiParam(value = "SNS시스템 ID", required = false, example = "kakao")
 	private String sysid;
-	private Integer agegrop;
-	//private String refreshToken;
-	//private String accessToekn;
 	
 	@Builder
-	public UserDto(Long id, String nickname, String email, String agerange, String snsid, String sysid, Integer agegrop,String refreshToken,String accessToekn) {
+	public UserDto(Long id, String nickname, String email, String agerange, String snsid, String sysid,String refreshToken,String accessToekn) {
 		this.id = id;
 		this.nickname = nickname;
 		this.email = email;
 		this.agerange = agerange;
 		this.snsid  = snsid;
 		this.sysid  = sysid;
-		this.agegrop  = agegrop;
-		//this.refreshToken  = refreshToken;
-		//this.accessToekn  = accessToekn;
 
 	}
 
@@ -47,9 +48,6 @@ public class UserDto {
 		this.agerange = user.getAgerange();
 		this.snsid = user.getNickname();
 		this.sysid = user.getSysid();
-		this.agegrop = user.getAgegrop();
-		//this.refreshToken = user.getRefreshToken();
-		//this.accessToekn = user.getAccessToekn();
 
 	}
 }

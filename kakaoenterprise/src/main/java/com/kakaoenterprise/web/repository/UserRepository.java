@@ -19,6 +19,10 @@ import com.kakaoenterprise.domain.user.User;
 public interface UserRepository extends JpaRepository<User, Long> {
 
 	public User findByUsername(String username);
+	
+	public User findBySnsid(Long snsid);
+	
+	
 
 	/**
 	 * @Method Name  : update

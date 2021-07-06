@@ -1,8 +1,11 @@
 package com.kakaoenterprise.aspect;
 
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.util.Date;
 import java.util.Enumeration;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -13,6 +16,7 @@ import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
 import org.json.simple.JSONObject;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StopWatch;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
@@ -36,30 +40,47 @@ public class LoggerAspect {
 	@Around("loggerPointCut()")
 	public Object methodLogger(ProceedingJoinPoint proceedingJoinPoint) throws Throwable {
 		try {
+
+			StopWatch stopWatch = new StopWatch();
+			stopWatch.start();
 			Object result = proceedingJoinPoint.proceed();
-			HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes())
-					.getRequest(); // request 정보를 가져온다.
-
-			String controllerName = proceedingJoinPoint.getSignature().getDeclaringType().getSimpleName();
-			String methodName = proceedingJoinPoint.getSignature().getName();
-
-			Map<String, Object> params = new HashMap<>();
-
+			stopWatch.stop();
 			try {
+				HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes())
+						.getRequest(); // request 정보를 가져온다.
+
+				JSONObject params = new JSONObject();
+				String controllerName = proceedingJoinPoint.getSignature().getDeclaringType().getSimpleName();
+				String methodName = proceedingJoinPoint.getSignature().getName();
+				params.put("runtime", stopWatch.getTotalTimeMillis());
+				params.put("http_method", request.getMethod());
+				params.put("request_uri", request.getRequestURI());
 				params.put("controller", controllerName);
 				params.put("method", methodName);
 				params.put("params", getParams(request));
-				params.put("log_time", new Date());
-				params.put("request_uri", request.getRequestURI());
-				params.put("http_method", request.getMethod());
+				params.put("heder", geHeader(request));
+				log.info("{'INT_REQ_PROC':'{}' }",params);
 			} catch (Exception e) {
-				log.error("LoggerAspect error", e);
+				log.error("{'INT_LOG':'{}'}", e);
 			}
-			log.info("params : {}", params); // param에 담긴 정보들을 한번에 로깅한다.
 
 			return result;
 
 		} catch (Throwable throwable) {
+			HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes())
+					.getRequest(); // request 정보를 가져온다.
+			JSONObject params = new JSONObject();
+			String controllerName = proceedingJoinPoint.getSignature().getDeclaringType().getSimpleName();
+			String methodName = proceedingJoinPoint.getSignature().getName();
+			params.put("http_method", request.getMethod());
+			params.put("request_uri", request.getRequestURI());
+			params.put("controller", controllerName);
+			params.put("method", methodName);
+			params.put("params", getParams(request));
+			params.put("heder", geHeader(request));
+			StringWriter sw = new StringWriter(); throwable.printStackTrace(new PrintWriter(sw));
+			params.put("error", sw.toString());
+			log.error("{'INT_REQ_PROC':'{}' }",params);
 			throw throwable;
 		}
 	}
@@ -77,6 +98,17 @@ public class LoggerAspect {
 			String param = params.nextElement();
 			String replaceParam = param.replaceAll("\\.", "-");
 			jsonObject.put(replaceParam, request.getParameter(param));
+		}
+		return jsonObject;
+	}
+
+	private JSONObject geHeader(HttpServletRequest request) {
+		Enumeration<String> em = request.getHeaderNames();
+		JSONObject jsonObject = new JSONObject();
+		while (em.hasMoreElements()) {
+			String name = em.nextElement();
+			String val = request.getHeader(name);
+			jsonObject.put(name, val);
 		}
 		return jsonObject;
 	}

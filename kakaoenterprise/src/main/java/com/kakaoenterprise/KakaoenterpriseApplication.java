@@ -21,7 +21,6 @@ public class KakaoenterpriseApplication {
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		log.info("start");
 		SpringApplication.run(KakaoenterpriseApplication.class, args);
 	}
 

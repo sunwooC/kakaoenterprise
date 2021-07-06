@@ -4,6 +4,7 @@ import javax.validation.constraints.NotBlank;
 
 import com.kakaoenterprise.domain.user.User;
 
+import io.swagger.annotations.ApiParam;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -19,8 +20,9 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 public class UserUpdateReqDto {
-	@NotBlank(message = "Local id(연번)입니다.")
+	@ApiParam(value = "User Idf로 로그인시 사용", required = false, example = "h1212")
 	private Long id;
+	@ApiParam(value = "닉네임", required = false, example = "하이하이")
 	@NotBlank(message = "닉네임은 필수 입니다.")
 	private String nickname;
 

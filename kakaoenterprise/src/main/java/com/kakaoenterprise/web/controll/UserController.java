@@ -76,14 +76,14 @@ public class UserController {
 			@ApiImplicitParam(name = "agerange", dataType = "string", paramType = "query", value = "연령대 10~19"),
 			@ApiImplicitParam(name = "domain", dataType = "string", paramType = "query", value = "이메일도메인 like %'kakaoenterprise.com'"),
 			@ApiImplicitParam(name = "size", dataType = "integer", paramType = "query", value = "페이지당 수"),
-			@ApiImplicitParam(name = "sort", allowMultiple = true, dataType = "string", paramType = "query", value = "정렬형식 &sort=agerange;asc&sort=email;desc 형태") })
+			@ApiImplicitParam(name = "sort", allowMultiple = true, dataType = "string", paramType = "query", value = "정렬형식 agerange.asc-=email.desc 형태") })
 	@GetMapping("/api/v1/users")
 	public ResponseEntity<Page<UserDto>> list(
 			@RequestParam(value = "agerange", required = false, defaultValue = "") String agerange,
 			@RequestParam(value = "domain", required = false, defaultValue = "") String domain,
 			@RequestParam(value = "page", required = false, defaultValue = "") int page,
 			@RequestParam(value = "size", required = false, defaultValue = "10") int size,
-			String[] sort){
+			String sort){
 		Page<UserDto> posts = null;
 		Sort sortordery = Sort.by("id");
 		sortordery = sortOrder(sortordery,sort);
@@ -100,12 +100,18 @@ public class UserController {
 		}
 		return new ResponseEntity<>(posts, HttpStatus.OK);
 	}
-	private Sort sortOrder(Sort sort,String[] sorts) {
-		if (sorts == null) return sort ;
+	private Sort sortOrder(Sort sort,String paramSort) {
+		if(paramSort == null) {
+			return sort;
+		}
+		String[] sorts = paramSort.split("-");
+		if (sorts == null) {
+			return sort;
+		}
 		sort = sort.unsorted();
 		for(String item : sorts) {
 			item = item.trim();
-			String data[] = item.split(";");
+			String data[] = item.split(".");
 			if(data.length == 0 ){
 				continue;
 			}
@@ -128,12 +134,12 @@ public class UserController {
 	 * @param userUpdateReqDto
 	 * @return
 	 */
-	@ApiOperation(value = "Id로 회줭정보 수정", notes = "로컬정만 변경")
+	@ApiOperation(value = "로컬 Id로 회줭정보 수정", notes = "로컬정만 변경")
 	@PostMapping("/api/v1/user/{id}")
 	public ResponseEntity<?> update(@PathVariable int id
 			, @RequestBody  @Valid UserUpdateReqDto userUpdateReqDto,BindingResult result) {
 		if(result.hasErrors()){
-			throw new ApiException(ExceptionEnum.NOT_INPUT_DATA,result.getAllErrors().get(0).getDefaultMessage());
+			return new ResponseEntity<>(new Message(result.getAllErrors().get(0).getDefaultMessage()), HttpStatus.BAD_REQUEST);
 		}	
 		userService.update(userUpdateReqDto);
 		return new ResponseEntity<>(new Message("update"), HttpStatus.OK);
@@ -148,11 +154,11 @@ public class UserController {
 	 * @param id
 	 * @return
 	 */
-	@ApiOperation(value = "Id로 회줭정보 삭제", notes = "카카오 가입자는 연결끊기까지 처리")
+	@ApiOperation(value = "로컬 Id로 회줭정보 삭제", notes = "카카오 가입자는 연결끊기까지 처리")
 	@DeleteMapping("/api/v1/user/{id}")
 	public ResponseEntity<?> deleteId(@PathVariable Long id) {
 		User user = userService.findById(id);
-		if (user.getSysid() != null) {
+		if ("Kakao".equals(user.getSysid())) {
 			// 카카오에 로그아웃
 			String snsid = user.getUsername().replace("Kakao_", "");
 			ResponseEntity<String> result = kakaoServiceImpl.unlinkAdmin(snsid);

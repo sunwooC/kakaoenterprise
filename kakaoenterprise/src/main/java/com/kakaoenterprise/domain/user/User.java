@@ -76,7 +76,7 @@ public class User implements Serializable {
 
 	public UserDto convertToAccountResDto() {
 		return UserDto.builder().nickname(this.nickname).email(this.email).id(this.id).agerange(this.agerange)
-				.agegrop(agegrop).refreshToken(refreshToken).accessToekn(accessToekn).sysid(sysid).build();
+				.refreshToken(refreshToken).accessToekn(accessToekn).sysid(sysid).build();
 	}
 
 }

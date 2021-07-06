@@ -78,6 +78,14 @@ public class UserServiceImpl  {
 		Optional<User> user = userRepository.findById(id);
 		return user.orElse(null);
 	}
+	/**
+	 * 로컬 및 카카오로 가입된 사용자 정보를 고유ID로 조회 
+	 * @param id 유저정보의 ID
+	 * @return 사용자 정보
+	 */
+	public User findBySnsid(Long id) {
+		return userRepository.findBySnsid(id);
+	}
 
 	/**
 	 * 로컬 및 카카오로 가입된 사용자 정보를 고유ID에 대해 nickname변경

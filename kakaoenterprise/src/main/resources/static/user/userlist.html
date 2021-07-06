@@ -45,7 +45,7 @@ i {
 
 <body>
 	<div id="app">
-		<div style="max-width: 900px; margin: 10px;">
+		<div style="max-width: 950px; margin: 10px;">
 
 
 
@@ -66,18 +66,18 @@ i {
 				<label for="movies">정렬기준</label> 
 					<select v-model="sortorder" name="sortorder" id="sortorder"> 
 						<option value="">전체</option> 
-						<option value="&sort=agerange;asc">나이▲</option> 
-						<option value="&sort=agerange;desc">나이▼</option> 
-						<option value="&sort=email;asc">메일주소▲</option>
-						<option value="&sort=email;desc">메일주소▼</option> 
-						<option value="&sort=agerange;asc&sort=email;asc">나이▲,메일주소▲</option>
-						<option value="&sort=agerange;asc&sort=email;desc">나이▲,메일주소▼</option> 
-						<option value="&sort=agerange;desc&sort=email;asc">나이▼,메일주소▲</option> 
-						<option value="&sort=agerange;desc&sort=email;desc">나이▼,메일주소▼</option> 
-						<option value="&sort=email;asc&sort=agerange;asc">메일주소▲,나이▲</option>
-						<option value="&sort=email;asc&sort=agerange;desc">메일주소▲,나이▼</option> 
-						<option value="&sort=email;desc&sort=agerange;asc">메일주소▼,나이▲</option> 
-						<option value="&sort=email;desc&sort=agerange;desc">메일주소▼,나이▼</option> 
+						<option value="&sort=agerange.asc">나이▲</option> 
+						<option value="&sort=agerange.desc">나이▼</option> 
+						<option value="&sort=email.asc">메일주소▲</option>
+						<option value="&sort=email.desc">메일주소▼</option> 
+						<option value="&sort=agerange.asc-email.asc">나이▲,메일주소▲</option>
+						<option value="&sort=agerange.asc-email.desc">나이▲,메일주소▼</option> 
+						<option value="&sort=agerange.desc-email.asc">나이▼,메일주소▲</option> 
+						<option value="&sort=agerange.desc-email.desc">나이▼,메일주소▼</option> 
+						<option value="&sort=email.asc-agerange.asc">메일주소▲,나이▲</option>
+						<option value="&sort=email.asc-agerange.desc">메일주소▲,나이▼</option> 
+						<option value="&sort=email.desc-agerange.asc">메일주소▼,나이▲</option> 
+						<option value="&sort=email.desc-agerange.desc">메일주소▼,나이▼</option> 
 					</select> 
 				
 
@@ -94,8 +94,9 @@ i {
 				<div class="md-layout-item md-size-100">
 
 					<div class="md-layout listTitle">
+						<div class="md-layout-item md-size-5 text-info">내부id</div>
 						<div class="md-layout-item md-size-15 text-info">닉네임</div>
-						<div class="md-layout-item md-size-25 text-info">이메일</div>
+						<div class="md-layout-item md-size-20 text-info">이메일</div>
 						<div class="md-layout-item md-size-10 text-info">가입시스템</div>
 						<div class="md-layout-item md-size-15 text-info">카카오조회</div>
 						<div class="md-layout-item md-size-10 text-info">수정(닉)</div>
@@ -107,8 +108,9 @@ i {
 
 					<div class="md-layout listInner"
 						v-for="(listItem, index) in displayData" :key="index">
+						<div class="md-layout-item md-size-5 text-info">{{ listItem.id }}</div>
 						<div class="md-layout-item md-size-15 text-info">{{ listItem.nickname }}</div>
-						<div class="md-layout-item md-size-25 text-info">{{ listItem.email }}</div>
+						<div class="md-layout-item md-size-20 text-info">{{ listItem.email }}</div>
 						<div class="md-layout-item md-size-10 text-info">{{ listItem.sysid }}</div>
 
 						<div class="md-layout-item md-size-15 text-info">
@@ -321,7 +323,8 @@ i {
 						}
 					)
             		.catch(error => {
-						alert("변경에 실패하였습니다.");
+            			console.log(error);
+						alert(error.message);
             		});
                 },
                 removeData() {
@@ -355,7 +358,7 @@ i {
     				axios.get('/api/v2/user/me/'+this.selectedData.id)
 					.then(res => {
 						console.log(res.data);
-						alert(res);
+						alert(res.data.message);
 						}
 					).catch(error => {
 						console.log(error);
@@ -373,7 +376,7 @@ i {
        				axios.post('/api/v2/user/token/'+this.selectedData.id)
    					.then(res => {
    						console.log(res);
-   						alert("갱신된 토큰 : "+res.data.access_token);
+   						alert("결과 : "+res.data.message);
    						}
    					)
                		.catch(error => {
@@ -391,7 +394,7 @@ i {
        				axios.delete('/api/v1/user/unlink/'+this.selectedData.id)
    					.then(res => {
    						console.log(res);
-   						alert("unlink 사용자 : "+res.data);
+   						alert("unlink 사용자 : "+res.data.messag);
    						}
    					)
                		.catch(error => {
@@ -408,8 +411,7 @@ i {
                 	}
        				axios.post('/api/v1/user/logout/'+this.selectedData.id)
    					.then(res => {
-   						console.log(res);
-   						alert("logout 사용자 : "+res.data);
+   						alert("logout 사용자 : "+res.data.message);
    						}
    					)
                		.catch(error => {

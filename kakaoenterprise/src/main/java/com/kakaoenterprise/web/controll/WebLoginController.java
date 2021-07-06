@@ -16,6 +16,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -36,6 +37,7 @@ import com.kakaoenterprise.web.service.impl.RedisUserImpl;
 import com.kakaoenterprise.web.service.impl.UserServiceImpl;
 import com.kakaoenterprise.web.service.impl.WebLoginServicImpl;
 
+import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -81,8 +83,10 @@ public class WebLoginController {
 	 * @param user 가입자의 상세 정보
 	 * @return
 	 */
-	@RequestMapping("/api/v1/auth/local")
-	public ResponseEntity login(@RequestBody @Valid UserLoginDto user,BindingResult result) {
+	
+	@ApiOperation(value = "로컨 회원 로그인", notes = "ID/PW로 로그인 하는 정보")
+	@PostMapping("/api/v1/auth/local")
+	public ResponseEntity<Message> login(@RequestBody @Valid UserLoginDto user,BindingResult result) {
 		if(result.hasErrors()){
 			return new ResponseEntity<>(new Message(result.getAllErrors().get(0).getDefaultMessage()), HttpStatus.BAD_REQUEST);
 		}		
@@ -108,10 +112,11 @@ public class WebLoginController {
 	 * @param result 휴요값 인증 처리
 	 * @return 신규 생성 결과 
 	 */
-	@RequestMapping("/api/v1/auth/local/new")
-	public ResponseEntity join(@RequestBody @Valid AuthJoinReqDto authJoinReqDto,BindingResult result) {
+	@ApiOperation(value = "로컨 회원 가입", notes = "신규 가입을 위한 요청 처리")
+	@PostMapping("/api/v1/auth/local/new")
+	public ResponseEntity<Message> join(@RequestBody @Valid AuthJoinReqDto authJoinReqDto,BindingResult result) {
 		if(result.hasErrors()){
-			throw new ApiException(ExceptionEnum.NOT_INPUT_DATA,result.getAllErrors().get(0).getDefaultMessage());
+			return new ResponseEntity<>(new Message(result.getAllErrors().get(0).getDefaultMessage()), HttpStatus.BAD_REQUEST);
 		}
 		authJoinReqDto.setPassword(ecodeing(authJoinReqDto.getPassword()));
 		User user = userImpl.join(authJoinReqDto.toEntity());
@@ -129,11 +134,12 @@ public class WebLoginController {
 	 * @return
 	 * @throws IOException 
 	 */
+	@ApiOperation(value = "로컨 회원 로그아웃", notes = "로그인 된 상태에서 로그아웃 됨.")
 	@DeleteMapping("/api/v1/auth/local")
-	public ResponseEntity logout() throws IOException {
+	public ResponseEntity<Message> logout() throws IOException {
 		HttpSession session = getCurrentUserAccount(false);
 		if (session == null) {
-			return new ResponseEntity<>(1, HttpStatus.OK);
+			return new ResponseEntity<>(new Message("logout"), HttpStatus.OK);
 		}
 		String id = (String)session.getAttribute("sessionId");
 		
@@ -149,25 +155,7 @@ public class WebLoginController {
 	}
 
 	
-	/**
-	 * @Method Name  : ecodeing
-	 * @작성일   : 2021. 7. 5.
-	 * @작성자   : 조선우
-	 * @변경이력  :
-	 * @Method 설명 : SHA-256 암호화
-	 * @param password 패스워드
-	 * @return
-	 */
-	private String ecodeing(String password) {
-		String ecodeing = "";
-		try {
-			MessageDigest md = MessageDigest.getInstance("SHA-256");
-			md.update(password.getBytes());
-			ecodeing = String.format("%064x", new BigInteger(1, md.digest()));
-		} catch (Exception e) {
-		}
-		return ecodeing;
-	}
+
 
 	/**
 	 * @Method Name  : getCurrentUserAccount
@@ -196,8 +184,9 @@ public class WebLoginController {
 	 * @return
 	 * @throws IOException
 	 */
+	@ApiOperation(value = "카카오 로그인 이후 CallBack 처리", notes = "로그인 및 자동 가입 처리")
 	@GetMapping("/login/oauth2/code/kakao")
-	public ResponseEntity callback(HttpServletResponse response,String code, String error) throws IOException {
+	public ResponseEntity<Message> callback(HttpServletResponse response,String code, String error) throws IOException {
 		ResponseEntity<KakaoAuthToken> reesutl = kakaoUserServiceImpl.postOauthToken(code);
 		if (reesutl.getStatusCode() != HttpStatus.OK) {
 			log.error("[LOGIN.CODE]statusL{},eror:{}",reesutl.getStatusCode(),error);
@@ -231,10 +220,40 @@ public class WebLoginController {
 		response.sendRedirect("/user/userlist.html");
 		return new ResponseEntity<>(new Message("login"), HttpStatus.OK);
 	}
+	/**
+	 * @Method Name  : kakaoUrl
+	 * @작성일   : 2021. 7. 5.
+	 * @작성자   : 조선우
+	 * @변경이력  :
+	 * @Method 설명 : 카카오 로그인 url 전달용
+	 * @returnresponse 로그인 url
+	 * @throws IOException
+	 */	
+	@ApiOperation(value = "카카오 로그인 url 전달용", notes = "로그인 화면에 카카오 로그인처리용 url전달")
 	@GetMapping("/login/oauth2/kakao/url")
-	public ResponseEntity kakaoUrl() throws IOException {
+	public ResponseEntity<Message> kakaoUrl() throws IOException {
 		StringBuffer sub = new StringBuffer();
 		sub.append(authorizationUri).append("?client_id=").append(clientId).append("&redirect_uri=").append(redirectUri).append("&response_type=code");
 		return new ResponseEntity<>(new Message(sub.toString()), HttpStatus.OK);
 	}
+	/**
+	 * @Method Name  : ecodeing
+	 * @작성일   : 2021. 7. 5.
+	 * @작성자   : 조선우
+	 * @변경이력  :
+	 * @Method 설명 : SHA-256 암호화
+	 * @param password 패스워드
+	 * @return
+	 */
+	private String ecodeing(String password) {
+		String ecodeing = "";
+		try {
+			MessageDigest md = MessageDigest.getInstance("SHA-256");
+			md.update(password.getBytes());
+			ecodeing = String.format("%064x", new BigInteger(1, md.digest()));
+		} catch (Exception e) {
+		}
+		return ecodeing;
+	}
+	
 }

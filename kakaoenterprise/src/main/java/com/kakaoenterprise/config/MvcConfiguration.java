@@ -26,9 +26,9 @@ public class MvcConfiguration implements WebMvcConfigurer {
 	public void addInterceptors(InterceptorRegistry registry) {
 
 		registry.addInterceptor(loginCheckInterceptor).excludePathPatterns("/css/**", "/js/**", "/login",
-				"/login.html");
-		registry.addInterceptor(loggingInterceptor).excludePathPatterns("/css/**", "/js/**");
+				"/login.html","/swagger**","/webjars/**","/swagger-resources/**","/csrf","/v2/**");
 
+		registry.addInterceptor(loggingInterceptor).excludePathPatterns("/css/**", "/js/**","/","/swagge**","/webjars/**","/swagger-resources/**","/csrf","/v2/**","/error");
 
 	}
 }
