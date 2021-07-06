@@ -1,5 +1,5 @@
 server:
-  port: 8081
+  port: 8082
   servlet:
     context-path: /
     encoding:
@@ -16,7 +16,7 @@ spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://localhost:3306/work?serverTimezone=Asia/Seoul
-    username: work
+    username: root
     password: password
     
   jpa:
@@ -51,7 +51,7 @@ spring:
             client-secret: TVM523yqMiG8aGb4oQQ9uHEleBGfq8oa
             scope: profile,account_email,age_range
             authorization-grant-type: authorization_code
-            redirect-uri: http://localhost:8081/login/oauth2/code/kakao
+            redirect-uri: http://localhost:8082/login/oauth2/code/kakao
             client-name: Kakao
             client-authentication-method: POST
         provider:

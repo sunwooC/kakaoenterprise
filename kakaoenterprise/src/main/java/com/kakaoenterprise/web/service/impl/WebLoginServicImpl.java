@@ -48,15 +48,14 @@ public class WebLoginServicImpl {
 	 * @return
 	 */
 	@Transactional
-	public boolean join(User user) {
+	public User join(User user) {
 		User info = userRepository.findByUsername(user.getUsername());
 		if (info != null) {
-			return false;
+			return null;
 		}
 		user.setRole(RoleType.USER);
 		user.setSysid("LOCAL");
-		userRepository.save(user);
-		return true;
+		return userRepository.save(user);
 	}
 	/**
 	 * @Method Name  : merge
@@ -68,13 +67,12 @@ public class WebLoginServicImpl {
 	 * @return
 	 */
 	@Transactional
-	public boolean merge(User user) {
+	public User merge(User user) {
 		User info = userRepository.findByUsername(user.getUsername());
 		if (info != null) {
 			user.setId(info.getId());
 		}
-		userRepository.save(user);
-		return true;
+		return userRepository.save(user);
 	}
 
 }

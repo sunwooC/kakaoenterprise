@@ -156,7 +156,11 @@ i {
                         }
     				axios.post('/api/v1/auth/local',loginData)
 					.then(res => {
-						window.location = "/user/userlist.html";
+							if(res.data.message ==="login"){
+								window.location = "/user/userlist.html";
+							}else{
+								alert(res.data.message);
+							}
 						}
 					)
             		.catch(error => {
@@ -175,11 +179,15 @@ i {
                     		email: this.newData.email,
                     		argrange: this.newData.argrange,
                         };
-    				axios.post('/api/auth/local/new',joinData)
+    				axios.post('/api/v1/auth/local/new',joinData)
 					.then(res => {
-						alert("가입되었습니다.");
-	                    this.closeDialog();
-	                    this.clearData();
+							if(res.data.message === "join"){
+								alert("가입되었습니다.");
+			                    this.closeDialog();
+			                    this.clearData();
+							}else{
+								alert(res.data.message);
+							}
 						}
 					)
             		.catch(error => {

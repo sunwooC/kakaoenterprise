@@ -22,7 +22,7 @@ public enum ExceptionEnum {
     NOT_FOUND_USER(HttpStatus.NOT_FOUND, "S0002", "사용자를 찾을 수 없습니다."),
     NOT_KAKO_USER(HttpStatus.NOT_FOUND, "S0003", "카카오 사용자가 아닙니다."),
     NOT_MATCHED_USER(HttpStatus.BAD_REQUEST, "S0004", "passwd가 일치 하지 않습니다."),
-	NOT_HAS_USER(HttpStatus.BAD_REQUEST, "S0005", "같은 ID가 존재합니다."); 
+	NOT_JOIN_USER(HttpStatus.BAD_REQUEST, "S0005", "같은 ID가 존재합니다."); 
     
     private final HttpStatus status;
     private final String code;

@@ -110,7 +110,7 @@ public class UserServiceImpl  {
 	 * @param user 사용자의 저장하고자하는 정보
 	 * @return 정장된 사용자 정보
 	 */
-	public User Save(User user) {
+	public User save(User user) {
 		return userRepository.save(user);
 	}
 	

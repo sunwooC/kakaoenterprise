@@ -1,6 +1,7 @@
 package com.kakaoenterprise.web.controll;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import javax.transaction.Transactional;
 
 import org.springframework.http.HttpStatus;
@@ -10,6 +11,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
 import com.kakaoenterprise.domain.user.User;
 import com.kakaoenterprise.web.dto.KakaoAuthToken;
@@ -23,9 +26,6 @@ import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-@Slf4j
-@RequiredArgsConstructor
-@RestController
 /**
  * - 사용자 정보 조회 (#req-user-info) 
  * - 로그아웃 (#logout) 
@@ -36,6 +36,9 @@ import lombok.extern.slf4j.Slf4j;
  * @date 2021.07.05
  * @version 1.0
  */
+@Slf4j
+@RequiredArgsConstructor
+@RestController
 public class KacaoUserController {
 	/*
 	 * @Autowired private SessionRegistry sessionRegistry;
@@ -87,7 +90,7 @@ public class KacaoUserController {
 		ResponseEntity<KakaoAuthToken> result = kakaoServiceImpl.updateToken(snsid, refreshToken);
 		if (result.getStatusCode() == HttpStatus.OK) {
 			user.setAccessToekn(result.getBody().getAccess_token());
-			userServiceImpl.Save(user);
+			userServiceImpl.save(user);
 		}
 		return result;
 	}
@@ -113,9 +116,29 @@ public class KacaoUserController {
 		ResponseEntity<String> result = kakaoServiceImpl.unlinkAdmin(snsid);
 		if (result.getStatusCode() == HttpStatus.OK) {
 			userServiceImpl.deleteById(user.getId());
-			redisUserImpl.logout(user.getUsername());
+			String sessionId = redisUserImpl.logout(user.getUsername());
+			boolean logoutCheck = logout(sessionId);
 		}
 		return result;
+	}
+	/**
+	 * @Method Name  : logout
+	 * @작성일   : 2021. 7. 5.
+	 * @작성자   : User1
+	 * @변경이력  :
+	 * @Method 설명 :세션Id와 세션을 만료 시는 기능
+	 * @param sessionId 세션의 ID
+	 * @return 로그인 사용자 강제로그아웃 사용자가 같을때 true
+	 */
+	private boolean logout(String sessionId) {
+		HttpSession session = getCurrentUserAccount(false);
+		if (session != null && session.getId().equals(sessionId)) {
+			session.removeAttribute("sessionId");
+			session.removeAttribute("sessionUserName");
+			session.invalidate(); //세션의 모든 속성을 삭제
+			return true;
+		}
+		return false;
 	}
 
 	/**
@@ -139,9 +162,24 @@ public class KacaoUserController {
 		String snsid = user.getUsername().replace("Kakao_", "");
 		ResponseEntity<String> result = kakaoServiceImpl.logout(user.getAccessToekn());
 		if (result.getStatusCode() == HttpStatus.OK) {
-			redisUserImpl.logout(user.getUsername());
+			String session = redisUserImpl.logout(user.getUsername());
+			boolean logoutCheck = logout(session);
 		}
+		
 		return result;
 	}
-
+	/**
+	 * @Method Name  : getCurrentUserAccount
+	 * @작성일   : 2021. 7. 5.
+	 * @작성자   : User1
+	 * @변경이력  :
+	 * @Method 설명 : 세션정보를 반환
+	 * @return sessionChk : 값에 따라 세션 생성 여부 결정
+	 */
+	public HttpSession getCurrentUserAccount(boolean sessionChk) {
+		ServletRequestAttributes servletRequestAttribute = (ServletRequestAttributes) RequestContextHolder
+				.currentRequestAttributes();
+		HttpSession httpSession = servletRequestAttribute.getRequest().getSession(sessionChk);
+		return httpSession;
+	}
 }

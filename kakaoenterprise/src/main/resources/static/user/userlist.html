@@ -63,7 +63,7 @@ i {
 					v-model="domain" /> </md-field>
 				<div>
 					<button v-on:click="getData(0)">조회</button>
-					<button v-on:click="mylogOut()">로그아웃(로그인한 본인)</button>
+					<button v-on:click="mylogOut()">로그아웃(자체)</button>
 				</div>
 			</div>
 
@@ -417,6 +417,17 @@ i {
                 },
                 */
                 mylogOut(){
+       				axios.delete('/api/v1/auth/local')
+   					.then(res => {
+	   						if(res.data.message === 'logout'){
+		   						alert("logout 완료");
+		   						window.location = "/user/userlist.html";
+	   						}
+   						}
+   					)
+               		.catch(error => {
+               			alert("실패:"+error.response.data.message);
+               		});     
                 	
                 },
                 closeDialog() {

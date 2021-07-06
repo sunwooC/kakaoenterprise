@@ -156,17 +156,20 @@ class UserServiceImplTest {
 	public void deleteById() {
 		User person = User.builder().username("Tset").nickname("Tset").password("111").id(1L).build();
 		org.junit.Assert.assertNull(userRepository.getById(person.getId()));
-		userService.Save(person);
+		userService.save(person);
 		userService.deleteById(person.getId());
 		org.junit.Assert.assertNull(userService.findById(person.getId()));
 	}
 
 	@Test
 	public void Save() {
-		User person = User.builder().username("Tset").nickname("Tset").password("111").id(1L).build();
-		org.junit.Assert.assertNull(userRepository.getById(person.getId()));
-		userService.Save(person);
-		org.junit.Assert.assertNull(userService.findById(person.getId()));
+		// given
+		User member1 = User.builder().username("Tset").nickname("Tset").password("111").id(1L).build();
+
+		given(userRepository.save(member1)).willReturn(member1);
+		// when
+		User retMeber = userService.save(member1);
+		assertEquals(member1.getNickname(),retMeber.getNickname());
 	}
 
 }

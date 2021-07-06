@@ -26,7 +26,7 @@ import lombok.extern.slf4j.Slf4j;
 public class LoginCheckInterceptor extends HandlerInterceptorAdapter {
 	@Value("${spring.security.oauth2.client.registration.kakao.redirect-uri}")
 	private String redirectUri;
-	private String[] allowedUris = new String[] { "/login.html", "/api/v1/auth/local", "/api/auth/local/new",
+	private String[] allowedUris = new String[] { "/login.html", "/api/v1/auth/local", "/api/v1/auth/local/new",
 			"/login/oauth2/code/kakao" };
 
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
@@ -34,7 +34,7 @@ public class LoginCheckInterceptor extends HandlerInterceptorAdapter {
 		String uriPath = request.getServletPath();
 		HttpSession session = request.getSession(false);
 		if (session != null) {
-			if (uriPath.equals("/login.html")) {
+			if (uriPath.equals("/login.html") || uriPath.equals("/")) {
 				response.sendRedirect(request.getContextPath() + "/user/userlist.html");
 			}
 		}

@@ -48,12 +48,13 @@ public class RedisUserImpl {
 	 * @Method 설명 :
 	 * @param username
 	 */
-	public void logout(String username) {
+	public String logout(String username) {
 		RedisTemplate redisTemplate = redisConfig.redisTemplate();
-		String session = (String) redisTemplate.opsForHash().get("LOGIN:USER:ID", username);
-		if (session != null) {
-			redisTemplate.delete("spring:session:sessions:" + session);
+		String sessionId = (String) redisTemplate.opsForHash().get("LOGIN:USER:ID", username);
+		if (sessionId != null) {
+			redisTemplate.delete("spring:session:sessions:" + sessionId);
 			redisTemplate.opsForHash().delete("LOGIN:USER:ID", username);
 		}
+		return sessionId;
 	}
 }

@@ -9,6 +9,7 @@ import javax.servlet.http.HttpSession;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -21,11 +22,13 @@ import com.kakaoenterprise.domain.user.User;
 import com.kakaoenterprise.web.dto.AuthJoinReqDto;
 import com.kakaoenterprise.web.dto.KaKaoUserInfo;
 import com.kakaoenterprise.web.dto.KakaoAuthToken;
+import com.kakaoenterprise.web.dto.Message;
 import com.kakaoenterprise.web.dto.UserLoginDto;
 import com.kakaoenterprise.web.exception.ApiException;
 import com.kakaoenterprise.web.exception.ExceptionEnum;
 import com.kakaoenterprise.web.service.impl.KakaoUserServiceImpl;
 import com.kakaoenterprise.web.service.impl.RedisUserImpl;
+import com.kakaoenterprise.web.service.impl.UserServiceImpl;
 import com.kakaoenterprise.web.service.impl.WebLoginServicImpl;
 
 import lombok.RequiredArgsConstructor;
@@ -45,14 +48,15 @@ public class WebLoginController {
 	private final WebLoginServicImpl userImpl;
 	private final KakaoUserServiceImpl kakaoUserServiceImpl;
 	private final RedisUserImpl redisUserImpl;
+	private final UserServiceImpl userServiceImpl;
 
 	/**
 	 * @Method Name  : login
 	 * @작성일   : 2021. 7. 5.
 	 * @작성자   : User1
 	 * @변경이력  :
-	 * @Method 설명 :
-	 * @param user
+	 * @Method 설명 :ㅣlocal 로컬 가입자 로그인
+	 * @param user 가입자의 상세 정보
 	 * @return
 	 */
 	@RequestMapping("/api/v1/auth/local")
@@ -66,10 +70,10 @@ public class WebLoginController {
 			throw new ApiException(ExceptionEnum.NOT_MATCHED_USER);
 		}
 		// return "/user/userlist";
-		HttpSession session = getCurrentUserAccount();
-		session.setAttribute("sessionId", info.getId());
+		HttpSession session = getCurrentUserAccount(true);
+		session.setAttribute("sessionId", info.getId().toString());
 		session.setAttribute("sessionUserName", user.getUsername());
-		return new ResponseEntity<>(1, HttpStatus.OK);
+		return new ResponseEntity<>(new Message("login"), HttpStatus.OK);
 	}	
 
 	/**
@@ -77,27 +81,55 @@ public class WebLoginController {
 	 * @작성일   : 2021. 7. 5.
 	 * @작성자   : User1
 	 * @변경이력  :
-	 * @Method 설명 :
-	 * @param authJoinReqDto
+	 * @Method 설명 : 로그인
+	 * @param authJoinReqDto 로그인 사용자의 정보
 	 * @return
 	 */
-	@RequestMapping("/api/auth/local/new")
+	@RequestMapping("/api/v1/auth/local/new")
 	public ResponseEntity join(@RequestBody AuthJoinReqDto authJoinReqDto) {
 		authJoinReqDto.setPassword(ecodeing(authJoinReqDto.getPassword()));
-		boolean result = userImpl.join(authJoinReqDto.toEntity());
-		if (result != true) {
-			throw new ApiException(ExceptionEnum.NOT_HAS_USER);
+		User user = userImpl.join(authJoinReqDto.toEntity());
+		if (user == null ) {
+			throw new ApiException(ExceptionEnum.NOT_JOIN_USER);
 		}
-		return new ResponseEntity<>(1, HttpStatus.OK);
+		return new ResponseEntity<>(new Message("join"), HttpStatus.OK);
+	}
+	/**
+	 * @Method Name  : join
+	 * @작성일   : 2021. 7. 5.
+	 * @작성자   : User1
+	 * @변경이력  :
+	 * @Method 설명 : 로그아웃
+	 * @return
+	 * @throws IOException 
+	 */
+	@DeleteMapping("/api/v1/auth/local")
+	public ResponseEntity logout(HttpServletResponse response) throws IOException {
+		HttpSession session = getCurrentUserAccount(false);
+		if (session == null) {
+			return new ResponseEntity<>(1, HttpStatus.OK);
+		}
+		String id = (String)session.getAttribute("sessionId");
+		
+		User user = userServiceImpl.findById(Long.parseLong(id));
+		if (user == null || "Kakao".equals(user.getSysid())) {
+			String snsid = user.getUsername().replace("Kakao_", "");
+			String sessionId = redisUserImpl.logout(user.getUsername());
+		}
+		session.removeAttribute("sessionId");
+		session.removeAttribute("sessionUserName");
+		session.invalidate(); //세션의 모든 속성을 삭제
+		return new ResponseEntity<>(new Message("logout"), HttpStatus.OK);
 	}
 
+	
 	/**
 	 * @Method Name  : ecodeing
 	 * @작성일   : 2021. 7. 5.
 	 * @작성자   : User1
 	 * @변경이력  :
-	 * @Method 설명 :
-	 * @param password
+	 * @Method 설명 : SHA-256 암호화
+	 * @param password 패스워드
 	 * @return
 	 */
 	public String ecodeing(String password) {
@@ -116,13 +148,13 @@ public class WebLoginController {
 	 * @작성일   : 2021. 7. 5.
 	 * @작성자   : User1
 	 * @변경이력  :
-	 * @Method 설명 :
-	 * @return
+	 * @Method 설명 : 세션정보를 반환
+	 * @return sessionChk : 값에 따라 세션 생성 여부 결정
 	 */
-	public HttpSession getCurrentUserAccount() {
+	public HttpSession getCurrentUserAccount(boolean sessionChk) {
 		ServletRequestAttributes servletRequestAttribute = (ServletRequestAttributes) RequestContextHolder
 				.currentRequestAttributes();
-		HttpSession httpSession = servletRequestAttribute.getRequest().getSession(true);
+		HttpSession httpSession = servletRequestAttribute.getRequest().getSession(sessionChk);
 		return httpSession;
 	}
 
@@ -131,10 +163,10 @@ public class WebLoginController {
 	 * @작성일   : 2021. 7. 5.
 	 * @작성자   : User1
 	 * @변경이력  :
-	 * @Method 설명 :
-	 * @param response
-	 * @param code
-	 * @param error
+	 * @Method 설명 : 카카오 oauth로그인 처리
+	 * @param response 로그인 관련 처리
+	 * @param code 일회용 키
+	 * @param error 예러 내용
 	 * @return
 	 * @throws IOException
 	 */
@@ -160,10 +192,11 @@ public class WebLoginController {
 		User user = User.builder().username(id).nickname(nickname)
 				.agerange(ageRange).password("=======").email(email)
 				.refreshToken(refreshToken).accessToekn(accessToken)
+				.snsid(oAuth2UserInfo.getId())
 				.sysid("Kakao").role(RoleType.USER).build();
-		userImpl.merge(user);
-		HttpSession session = getCurrentUserAccount();
-		session.setAttribute("sessionId", user.getId());
+		user = userImpl.merge(user);
+		HttpSession session = getCurrentUserAccount(true);
+		session.setAttribute("sessionId", user.getId().toString());
 		session.setAttribute("sessionUserName", user.getUsername());
 		redisUserImpl.login(user.getUsername(),session.getId());
 		
