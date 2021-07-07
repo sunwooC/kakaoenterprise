@@ -24,6 +24,7 @@
 ## <ol>2.1 mysql 설치 및 설정 
       docker pull mysql:8.0.17  
       docker run -d -p 3306:3306 -e MYSQL_ROOT_PASSWORD=password --name mysql_sample mysql  
+      
 ## <ol>2.2 redis 설치  
        docker pull redis:alpine  
        docker run -p 6379:6379 --name myredis -vc:/redis:/data -d redis:alpine redis-server --appendonly yes  
@@ -45,12 +46,13 @@
       java -jar  kakaoenterpriseproj-0.0.1-SNAPSHOT.jar  
  
 # 4. 빌드/배포 전략 
-## <ol>4.1 빌드/배포를 위한 젠킨스 도커 생성 
+## <ol>4.1 빌드/배포를 위한 젠킨스 도커 생성(4.2에 통합본 사용,설치불필요)
        docker pull jenkins/jenkins:lts  
        docker run -d -p 8081:8081 -v c:/jenkins:/var/jenkins_home --name jm_jenkins -u root jenkins/jenkins:lts  
 
 ## <ol>4.2 젠킨스 빌드 환경 구성
-      4-1에서 생성한 젠킨스에 도커 및 메이븐 ,Makefile 설치하여 이미지를 도커허브에 반영.
+      4-1에서 생성한 젠킨스에 도커 및 메이븐 ,Makefile, 빌드 프로젝트까지 통합하여 도커허브에 반영 완료
+      
       docker pull blueballpen/work:lates  
       docker run -d -p 8081:8080 -p 50000:50000 -v //var/run/docker.sock:/var/run/docker.sock -v c:/jenkins:/var/jenkins_home --name jenkins3 blueballpen/work:latest  
       #젠킨스 로그인 정보 admin / c7f4dd47ae684c0ca17845d568126cae
