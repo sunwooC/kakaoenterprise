@@ -46,7 +46,7 @@
    run_redis_docker: redis 도커 설치  
  
 ## <ol>4.3 구조
-   ![ex_screenshot](./image1.png)
+   ![ex_screenshot](image1.png)
     
  
    
