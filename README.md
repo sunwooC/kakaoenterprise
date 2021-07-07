@@ -104,7 +104,26 @@
 
 # 5. 로그 관리 및 모니터링
 ## <ol>5.1 로그 관리
-      1111
-   
+      내부 : INT 접두어
+      외부: EXT 접두
+      각 접두어의 ERROR레벨 로그 공통으로 남는 클래스는 아래 2개로
+      ApiExceptionAdvice.java는 RestContoller에서 발생한 오류
+      RestTemplateLoggingInterceptor.java 외부연계(카카오)에서 발생한 오류
+      INFO레벨의 로그에는 HTTP요청과 응답에 대한 로그와
+      외부연계(카카오)시 사용된 HTTP요청 응답이 포함.
+      LoggerAspect에서는 처리 시간이 5초 이상인 요청에 대해 WARN레벨의 로그를 기록.
+      
 ## <ol>5.2 모니터링
+      내부 : INT 접두어
+      외부: EXT 접두
+      두개의에서 발생한 에러 로는 시스템 장애로 의심할 수 있는 로그로
+      INT접두어 ERROR레벨의 경우 DB, Redis등의 장애와 
+      ,EXT접두어 ERROR레벨의 경우 카카오 연동 관련 장애로 의삼할 수 있음. 
+      INT접두어 WARN레벨의 경우 LoggerAspect에서 5초 이상 수행된 경우 남기고 있어
+      이 로그를 수집하여 개선 가능하지 검토 필요.
+      모니터링스퀘줄러 :  MNR 접두어
+      Scheduler.java에서 남기게 되는 로그로 
+      5분 주기로 어플리케이션의 상태를 actuator를 통해 서버 상태를 확인함.
+      해당 MNR에 ERROR이 발생했다면 반드시 확인이 필요함
+      (현재는 아주 간단하게 개발되어 있으며, 실사용을 위해서는 해당 부분 분리된 서버에서 수행필요)
       
