@@ -31,19 +31,24 @@
  docker pull jenkins/jenkins:lts  
  docker run -d -p 8081:8081 -v c:/jenkins:/var/jenkins_home --name jm_jenkins -u root jenkins/jenkins:lts  
 
-## <ol>4.2 젠킨스 빌드 
+## <ol>4.2 젠킨스 빌드 환경 구축
  
    docker pull blueballpen/work:lates  
    docker run -d -p 8081:8080 -p 50000:50000 -v //var/run/docker.sock:/var/run/docker.sock -v c:/jenkins:/var/jenkins_home --name jenkins3 blueballpen/work:latest  
+   #젠킨스 로그인 정보 admin / c7f4dd47ae684c0ca17845d568126cae
 
-   #젠킨스 로그인 정보  
-    admin / c7f4dd47ae684c0ca17845d568126cae   
+   젠키스 내부에 도커 및 메이븐 ,Makefile 설치 후 [그림-1]과 같이 구성
 
-   build_push_docker: 젠킨스가 포함된 도커를 도커서버에 푸쉬  
+   <img src="https://github.com/sunwooC/kakaoenterprise/blob/master/image3.PNG"  width="700" height="370">
+
+   
+   build_push_docker: 젠킨스가 포함된 도커를 도커허브에 푸쉬(빌드 환경 배포용)  
    maven_test123123: 이번 로그인 프로젝트 빌드  
-   run_maven_docker: maven_test123123에서 빌드된  jar로 도커이미지 생성 후 실행  
+   run_maven_docker: maven_test123123에서 빌드된 jar로 도커이미지 생성 후 실행  
    run_mysql_docker: mysql 도커 설치  
    run_redis_docker: redis 도커 설치  
+   
+   각 빌드 스크립트는 templates/workspace 아래에 반영
  
 ## <ol>4.3 구조
 <img src="https://github.com/sunwooC/kakaoenterprise/blob/master/image1.PNG"  width="700" height="370">
