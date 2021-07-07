@@ -47,9 +47,11 @@
  
 ## <ol>4.3 구조
 <img src="https://github.com/sunwooC/kakaoenterprise/blob/master/image1.PNG"  width="700" height="370">
-   
-   개발 환경 구조는 [그림1]과 같이 구성되고 배포를 위해 만든 환경은
-   
+개발 환경 구조는 [그림1]과 같이 구성되고 배포를 위해 만든 환경은
+<img src="https://github.com/sunwooC/kakaoenterprise/blob/master/image2.PNG"  width="700" height="370">
+[그림2]와 같이 구성. 젠킨스내부의 도커도 로컬PC와 공유되지만 app에서는 Redis,Mysql의 IP를  
+  알 수 없기에 로컬PC의 IP로 호출해 처리해야한다.
+
 
    
    
