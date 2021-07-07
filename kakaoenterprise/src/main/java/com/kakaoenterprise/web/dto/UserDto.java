@@ -29,15 +29,16 @@ public class UserDto {
 	private String snsid;
 	@ApiParam(value = "SNS시스템 ID", required = false, example = "kakao")
 	private String sysid;
-	
+
 	@Builder
-	public UserDto(Long id, String nickname, String email, String agerange, String snsid, String sysid,String refreshToken,String accessToekn) {
+	public UserDto(Long id, String nickname, String email, String agerange, String snsid, String sysid,
+			String refreshToken, String accessToekn) {
 		this.id = id;
 		this.nickname = nickname;
 		this.email = email;
 		this.agerange = agerange;
-		this.snsid  = snsid;
-		this.sysid  = sysid;
+		this.snsid = snsid;
+		this.sysid = sysid;
 
 	}
 

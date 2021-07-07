@@ -6,7 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 /**
- * 카카오 정보 중 Properties 
+ * 카카오 정보 중 Properties
  * 
  * @author sunwoo cho
  * @date 2021.07.05

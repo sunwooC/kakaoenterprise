@@ -77,20 +77,19 @@ public class KakaoUserServiceImpl {
 	 */
 	@Value("${kakao.adminKey}")
 	private String adminKey;
-	
+
 	private final RestConfig restConfig;
 
-
 	/**
-	 * @Method Name  : postOauthToken
-	 * @작성일   : 2021. 7. 5.
-	 * @작성자   : User1
-	 * @변경이력  :
+	 * @Method Name : postOauthToken
+	 * @작성일 : 2021. 7. 5.
+	 * @작성자 : User1
+	 * @변경이력 :
 	 * @Method 설명 :
 	 * @param code
 	 * @return
 	 */
-	public ResponseEntity<KakaoAuthToken>  postOauthToken(String code) {
+	public ResponseEntity<KakaoAuthToken> postOauthToken(String code) {
 		RestTemplate rt = restConfig.restTemplate("aaaa");
 		HttpHeaders headers = new HttpHeaders();
 		headers.add("Content-type", "application/x-www-form-urlencoded;charset=utf-8");
@@ -104,11 +103,12 @@ public class KakaoUserServiceImpl {
 		log.debug("{}", response.getBody());
 		return response;
 	}
+
 	/**
-	 * @Method Name  : postUserMe
-	 * @작성일   : 2021. 7. 5.
-	 * @작성자   : User1
-	 * @변경이력  :
+	 * @Method Name : postUserMe
+	 * @작성일 : 2021. 7. 5.
+	 * @작성자 : User1
+	 * @변경이력 :
 	 * @Method 설명 :
 	 * @param token
 	 * @return

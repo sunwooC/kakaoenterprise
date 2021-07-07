@@ -2,7 +2,6 @@ package com.kakaoenterprise.web.service.impl;
 
 import javax.transaction.Transactional;
 
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import com.kakaoenterprise.domain.user.RoleType;
@@ -24,11 +23,12 @@ import lombok.RequiredArgsConstructor;
 @Transactional
 public class WebLoginServicImpl {
 	private final UserRepository userRepository;
+
 	/**
-	 * @Method Name  : loadUserByUsername
-	 * @작성일   : 2021. 7. 5.
-	 * @작성자   : User1
-	 * @변경이력  :
+	 * @Method Name : loadUserByUsername
+	 * @작성일 : 2021. 7. 5.
+	 * @작성자 : User1
+	 * @변경이력 :
 	 * @Method 설명 :
 	 * @param user
 	 * @return
@@ -37,12 +37,12 @@ public class WebLoginServicImpl {
 		User info = userRepository.findByUsername(user.getUsername());
 		return info;
 	}
-	
+
 	/**
-	 * @Method Name  : join
-	 * @작성일   : 2021. 7. 5.
-	 * @작성자   : User1
-	 * @변경이력  :
+	 * @Method Name : join
+	 * @작성일 : 2021. 7. 5.
+	 * @작성자 : User1
+	 * @변경이력 :
 	 * @Method 설명 :
 	 * @param user
 	 * @return
@@ -57,11 +57,12 @@ public class WebLoginServicImpl {
 		user.setSysid("LOCAL");
 		return userRepository.save(user);
 	}
+
 	/**
-	 * @Method Name  : merge
-	 * @작성일   : 2021. 7. 5.
-	 * @작성자   : User1
-	 * @변경이력  :
+	 * @Method Name : merge
+	 * @작성일 : 2021. 7. 5.
+	 * @작성자 : User1
+	 * @변경이력 :
 	 * @Method 설명 :
 	 * @param user
 	 * @return

@@ -1,6 +1,5 @@
 package com.kakaoenterprise.config;
 
-
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.client.BufferingClientHttpRequestFactory;
 import org.springframework.http.client.SimpleClientHttpRequestFactory;

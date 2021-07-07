@@ -19,16 +19,14 @@ import com.kakaoenterprise.domain.user.User;
 public interface UserRepository extends JpaRepository<User, Long> {
 
 	public User findByUsername(String username);
-	
+
 	public User findBySnsid(Long snsid);
-	
-	
 
 	/**
-	 * @Method Name  : update
-	 * @작성일   : 2021. 7. 5.
-	 * @작성자   : User1
-	 * @변경이력  :
+	 * @Method Name : update
+	 * @작성일 : 2021. 7. 5.
+	 * @작성자 : User1
+	 * @변경이력 :
 	 * @Method 설명 :
 	 * @param nickname
 	 * @param id
@@ -39,10 +37,10 @@ public interface UserRepository extends JpaRepository<User, Long> {
 	public int update(String nickname, Long id);
 
 	/**
-	 * @Method Name  : deleteBySnsid
-	 * @작성일   : 2021. 7. 5.
-	 * @작성자   : User1
-	 * @변경이력  :
+	 * @Method Name : deleteBySnsid
+	 * @작성일 : 2021. 7. 5.
+	 * @작성자 : User1
+	 * @변경이력 :
 	 * @Method 설명 :
 	 * @param snsid
 	 * @return
@@ -52,10 +50,10 @@ public interface UserRepository extends JpaRepository<User, Long> {
 	int deleteBySnsid(@Param("snsid") Long snsid);
 
 	/**
-	 * @Method Name  : findByAgerange
-	 * @작성일   : 2021. 7. 5.
-	 * @작성자   : User1
-	 * @변경이력  :
+	 * @Method Name : findByAgerange
+	 * @작성일 : 2021. 7. 5.
+	 * @작성자 : User1
+	 * @변경이력 :
 	 * @Method 설명 :
 	 * @param arerang
 	 * @param pageable
@@ -64,10 +62,10 @@ public interface UserRepository extends JpaRepository<User, Long> {
 	public Page<User> findByAgerange(String arerang, Pageable pageable);
 
 	/**
-	 * @Method Name  : findByEmailEndingWith
-	 * @작성일   : 2021. 7. 5.
-	 * @작성자   : User1
-	 * @변경이력  :
+	 * @Method Name : findByEmailEndingWith
+	 * @작성일 : 2021. 7. 5.
+	 * @작성자 : User1
+	 * @변경이력 :
 	 * @Method 설명 :
 	 * @param email
 	 * @param pageable
@@ -76,10 +74,10 @@ public interface UserRepository extends JpaRepository<User, Long> {
 	public Page<User> findByEmailEndingWith(String email, Pageable pageable);
 
 	/**
-	 * @Method Name  : findByEmailEndingWithAndAgerange
-	 * @작성일   : 2021. 7. 5.
-	 * @작성자   : User1
-	 * @변경이력  :
+	 * @Method Name : findByEmailEndingWithAndAgerange
+	 * @작성일 : 2021. 7. 5.
+	 * @작성자 : User1
+	 * @변경이력 :
 	 * @Method 설명 :
 	 * @param daomin
 	 * @param arerang

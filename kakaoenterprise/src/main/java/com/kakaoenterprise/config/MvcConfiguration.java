@@ -25,10 +25,11 @@ public class MvcConfiguration implements WebMvcConfigurer {
 	@Override
 	public void addInterceptors(InterceptorRegistry registry) {
 
-		registry.addInterceptor(loginCheckInterceptor).excludePathPatterns("/css/**", "/js/**", "/login",
-				"/login.html","/swagger**","/webjars/**","/swagger-resources/**","/csrf","/v2/**");
+		registry.addInterceptor(loginCheckInterceptor).excludePathPatterns("/css/**", "/js/**", "/login", "/login.html",
+				"/swagger**", "/webjars/**", "/swagger-resources/**", "/csrf", "/v2/**");
 
-		registry.addInterceptor(loggingInterceptor).excludePathPatterns("/css/**", "/js/**","/","/swagge**","/webjars/**","/swagger-resources/**","/csrf","/v2/**","/error");
+		registry.addInterceptor(loggingInterceptor).excludePathPatterns("/css/**", "/js/**", "/", "/swagge**",
+				"/webjars/**", "/swagger-resources/**", "/csrf", "/v2/**", "/error");
 
 	}
 }

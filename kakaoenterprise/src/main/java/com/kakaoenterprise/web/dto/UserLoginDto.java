@@ -3,7 +3,6 @@ package com.kakaoenterprise.web.dto;
 import javax.validation.constraints.NotBlank;
 
 import com.kakaoenterprise.domain.user.User;
-import com.kakaoenterprise.web.exception.ExceptionEnum;
 
 import io.swagger.annotations.ApiParam;
 import lombok.Builder;

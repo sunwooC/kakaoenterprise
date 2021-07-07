@@ -36,7 +36,7 @@ public class User implements Serializable {
 	static final long serialVersionUID = 4136285672735957787L;
 	@Id // Primary key
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id; // 시퀀스, auto_increment
+	private Long id; // 시퀀스, auto_incrementㄴ
 
 	@Column(nullable = false, length = 100, unique = true)
 	private String username;

@@ -45,7 +45,7 @@ public class LoggerAspect {
 			stopWatch.start();
 			Object result = proceedingJoinPoint.proceed();
 			stopWatch.stop();
-		
+
 			return result;
 
 		} catch (Throwable throwable) {
@@ -60,9 +60,10 @@ public class LoggerAspect {
 			params.put("method", methodName);
 			params.put("params", getParams(request));
 			params.put("heder", geHeader(request));
-			StringWriter sw = new StringWriter(); throwable.printStackTrace(new PrintWriter(sw));
+			StringWriter sw = new StringWriter();
+			throwable.printStackTrace(new PrintWriter(sw));
 			params.put("error", sw.toString());
-			log.error("{\"INT_REQ_PROC\":'{}' }",params.toJSONString());
+			log.error("{\"INT_REQ_PROC\":'{}' }", params.toJSONString());
 			throw throwable;
 		}
 	}

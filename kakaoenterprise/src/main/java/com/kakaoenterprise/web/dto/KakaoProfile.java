@@ -3,7 +3,7 @@ package com.kakaoenterprise.web.dto;
 import lombok.Data;
 
 /**
- * 카카오 정보 중 Profile 
+ * 카카오 정보 중 Profile
  * 
  * @author sunwoo cho
  * @date 2021.07.05

@@ -2,13 +2,7 @@ package com.kakaoenterprise.interceptor;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
-import java.util.Enumeration;
-import java.util.List;
 import java.util.UUID;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.io.IOUtils;
 import org.json.simple.JSONObject;
@@ -54,7 +48,7 @@ public class RestTemplateLoggingInterceptor implements ClientHttpRequestIntercep
 			jsonObject.put("body", IOUtils.toString(body, StandardCharsets.UTF_8.name()));
 			jsonObject.put("marker", marker);
 			jsonObject.put("error", e.toString());
-			log.error("{'EXT_REQ_ERR':{}}",e.toString());
+			log.error("{'EXT_REQ_ERR':{}}", e.toString());
 			throw e;
 		}
 		loggingResponse(request, response);
@@ -68,7 +62,7 @@ public class RestTemplateLoggingInterceptor implements ClientHttpRequestIntercep
 		jsonObject.put("heder", request.getHeaders());
 		jsonObject.put("body", IOUtils.toString(body, StandardCharsets.UTF_8.name()));
 		jsonObject.put("marker", marker);
-		log.info("{'INT_REQ':{}}",jsonObject);
+		log.info("{'INT_REQ':{}}", jsonObject);
 	}
 
 	private void loggingResponse(HttpRequest request, ClientHttpResponse response) throws IOException {
@@ -79,7 +73,7 @@ public class RestTemplateLoggingInterceptor implements ClientHttpRequestIntercep
 		jsonObject.put("heder", response.getHeaders());
 		jsonObject.put("body", IOUtils.toString(response.getBody(), StandardCharsets.UTF_8.name()));
 		jsonObject.put("marker", marker);
-		log.info("{'INT_RES':{}}",jsonObject);
+		log.info("{'INT_RES':{}}", jsonObject);
 	}
 
 }

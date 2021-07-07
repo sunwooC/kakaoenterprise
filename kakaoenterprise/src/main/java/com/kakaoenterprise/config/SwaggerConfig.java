@@ -22,8 +22,8 @@ public class SwaggerConfig {
 	@Bean
 	public Docket commonApi() {
 		return new Docket(DocumentationType.SWAGGER_2).groupName("example").apiInfo(this.apiInfo()).select()
-				.apis(RequestHandlerSelectors.basePackage("com.kakaoenterprise"))
-				.paths(PathSelectors.ant("/api/**")).build();
+				.apis(RequestHandlerSelectors.basePackage("com.kakaoenterprise")).paths(PathSelectors.ant("/api/**"))
+				.build();
 	}
 
 }

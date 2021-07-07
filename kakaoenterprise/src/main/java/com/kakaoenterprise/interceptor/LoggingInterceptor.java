@@ -40,13 +40,16 @@ import lombok.extern.slf4j.Slf4j;
 public class LoggingInterceptor extends BaseInterceptor {
 
 	private final ObjectMapper objectMapper;
-	@Override
-    public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) throws Exception {
-        if (request.getClass().getName().contains("SecurityContextHolderAwareRequestWrapper")) return;
-        final ContentCachingRequestWrapper cachingRequest = (ContentCachingRequestWrapper) request;
-        final ContentCachingResponseWrapper cachingResponse = (ContentCachingResponseWrapper) response;
 
-        requstLog(cachingRequest,cachingResponse);
-        reqposeLog(cachingRequest,cachingResponse);
-    }
+	@Override
+	public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex)
+			throws Exception {
+		if (request.getClass().getName().contains("SecurityContextHolderAwareRequestWrapper"))
+			return;
+		final ContentCachingRequestWrapper cachingRequest = (ContentCachingRequestWrapper) request;
+		final ContentCachingResponseWrapper cachingResponse = (ContentCachingResponseWrapper) response;
+
+		requstLog(cachingRequest, cachingResponse);
+		reqposeLog(cachingRequest, cachingResponse);
+	}
 }

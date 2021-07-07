@@ -1,24 +1,13 @@
 package com.kakaoenterprise.interceptor;
 
-import java.io.PrintWriter;
-import java.io.StringWriter;
-import java.util.ArrayList;
-import java.util.Enumeration;
-import java.util.List;
-import java.util.UUID;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
-import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 import org.springframework.web.util.ContentCachingRequestWrapper;
 import org.springframework.web.util.ContentCachingResponseWrapper;
-
-import com.fasterxml.jackson.databind.ObjectMapper;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -41,8 +30,7 @@ public class LoginCheckInterceptor extends BaseInterceptor {
 
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
 			throws Exception {
-
-		
+		//해더에 Authorization가 Bearer sunwoo면 통과
 		String suthorization = request.getHeader("Authorization");
 		if ("Bearer sunwoo".equals(suthorization)) {
 			return true;
@@ -62,8 +50,8 @@ public class LoginCheckInterceptor extends BaseInterceptor {
 		}
 
 		if (session == null) {
-	        final ContentCachingRequestWrapper cachingRequest = (ContentCachingRequestWrapper) request;
-	        final ContentCachingResponseWrapper cachingResponse = (ContentCachingResponseWrapper) response;
+			final ContentCachingRequestWrapper cachingRequest = (ContentCachingRequestWrapper) request;
+			final ContentCachingResponseWrapper cachingResponse = (ContentCachingResponseWrapper) response;
 			requstLog(cachingRequest, cachingResponse);
 			response.sendRedirect(request.getContextPath() + "/login.html");
 			return false;

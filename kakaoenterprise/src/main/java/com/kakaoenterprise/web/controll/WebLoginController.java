@@ -113,7 +113,7 @@ public class WebLoginController {
 	@ApiOperation(value = "로컨 회원 가입", notes = "신규 가입을 위한 요청 처리")
 	@PostMapping("/api/v1/auth/local/new")
 	public ResponseEntity<Message> join(@RequestBody @Valid AuthJoinReqDto authJoinReqDto, BindingResult result) {
-		if (result.hasErrors()) { 
+		if (result.hasErrors()) {
 			return new ResponseEntity<>(new Message(result.getAllErrors().get(0).getDefaultMessage()),
 					HttpStatus.BAD_REQUEST);
 		}

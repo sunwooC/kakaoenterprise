@@ -27,10 +27,10 @@ public class RedisUserImpl {
 	private RedisConfig redisConfig;
 
 	/**
-	 * @Method Name  : login
-	 * @작성일   : 2021. 7. 5.
-	 * @작성자   : User1
-	 * @변경이력  :
+	 * @Method Name : login
+	 * @작성일 : 2021. 7. 5.
+	 * @작성자 : User1
+	 * @변경이력 :
 	 * @Method 설명 :
 	 * @param username
 	 * @param sessionId
@@ -41,10 +41,10 @@ public class RedisUserImpl {
 	}
 
 	/**
-	 * @Method Name  : logout
-	 * @작성일   : 2021. 7. 5.
-	 * @작성자   : User1
-	 * @변경이력  :
+	 * @Method Name : logout
+	 * @작성일 : 2021. 7. 5.
+	 * @작성자 : User1
+	 * @변경이력 :
 	 * @Method 설명 :
 	 * @param username
 	 */

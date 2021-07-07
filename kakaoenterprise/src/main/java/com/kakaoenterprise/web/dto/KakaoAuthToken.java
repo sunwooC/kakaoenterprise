@@ -6,7 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 /**
- * 카카오 로그인 시 관리되는 토큰 정보 
+ * 카카오 로그인 시 관리되는 토큰 정보
  * 
  * @author sunwoo cho
  * @date 2021.07.05

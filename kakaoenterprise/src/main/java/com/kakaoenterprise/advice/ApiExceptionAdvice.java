@@ -1,6 +1,5 @@
 package com.kakaoenterprise.advice;
 
-
 import org.json.JSONObject;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -27,56 +26,41 @@ import java.nio.file.AccessDeniedException;
  * @version 1.0
  */
 @Slf4j
-@RestControllerAdvice(basePackages="com.kakaoenterprise.web")
+@RestControllerAdvice(basePackages = "com.kakaoenterprise.web")
 public class ApiExceptionAdvice {
-    @ExceptionHandler({ApiException.class})
-    public ResponseEntity<ApiExceptionEntity> exceptionHandler(HttpServletRequest request, final ApiException e) {
-    	log.error("{\"INT_PROC_ERR\":{}}",exceptionToString(e));
-        return ResponseEntity
-                .status(e.getError().getStatus())
-                .body(ApiExceptionEntity.builder()
-                        .errorCode(e.getError().getCode())
-                        .message(e.getError().getMessage())
-                        .build());
-    }
+	@ExceptionHandler({ ApiException.class })
+	public ResponseEntity<ApiExceptionEntity> exceptionHandler(HttpServletRequest request, final ApiException e) {
+		log.error("{\"INT_PROC_ERR\":{}}", exceptionToString(e));
+		return ResponseEntity.status(e.getError().getStatus()).body(ApiExceptionEntity.builder()
+				.errorCode(e.getError().getCode()).message(e.getError().getMessage()).build());
+	}
 
-    @ExceptionHandler({RuntimeException.class})
-    public ResponseEntity<ApiExceptionEntity> exceptionHandler(HttpServletRequest request, final RuntimeException e) {
-    	log.error("{\"INT_PROC_ERR500\":{}}",exceptionToString(e));
-        return ResponseEntity
-                .status(ExceptionEnum.RUNTIME_EXCEPTION.getStatus())
-                .body(ApiExceptionEntity.builder()
-                        .errorCode(ExceptionEnum.RUNTIME_EXCEPTION.getCode())
-                        .message(e.getMessage())
-                        .build());
-    }
+	@ExceptionHandler({ RuntimeException.class })
+	public ResponseEntity<ApiExceptionEntity> exceptionHandler(HttpServletRequest request, final RuntimeException e) {
+		log.error("{\"INT_PROC_ERR500\":{}}", exceptionToString(e));
+		return ResponseEntity.status(ExceptionEnum.RUNTIME_EXCEPTION.getStatus()).body(ApiExceptionEntity.builder()
+				.errorCode(ExceptionEnum.RUNTIME_EXCEPTION.getCode()).message(e.getMessage()).build());
+	}
 
-    @ExceptionHandler({AccessDeniedException.class})
-    public ResponseEntity<ApiExceptionEntity> exceptionHandler(HttpServletRequest request, final AccessDeniedException e) {
-    	log.error("{\"INT_PROC_ERR500\":{}}",exceptionToString(e));
-        return ResponseEntity
-                .status(ExceptionEnum.ACCESS_DENIED_EXCEPTION.getStatus())
-                .body(ApiExceptionEntity.builder()
-                        .errorCode(ExceptionEnum.ACCESS_DENIED_EXCEPTION.getCode())
-                        .message(e.getMessage())
-                        .build());
-    }
+	@ExceptionHandler({ AccessDeniedException.class })
+	public ResponseEntity<ApiExceptionEntity> exceptionHandler(HttpServletRequest request,
+			final AccessDeniedException e) {
+		log.error("{\"INT_PROC_ERR500\":{}}", exceptionToString(e));
+		return ResponseEntity.status(ExceptionEnum.ACCESS_DENIED_EXCEPTION.getStatus()).body(ApiExceptionEntity
+				.builder().errorCode(ExceptionEnum.ACCESS_DENIED_EXCEPTION.getCode()).message(e.getMessage()).build());
+	}
 
-    @ExceptionHandler({Exception.class})
-    public ResponseEntity<ApiExceptionEntity> exceptionHandler(HttpServletRequest request, final Exception e) {
-    	log.error("{\"INT_PROC_ERR500\":{}}",exceptionToString(e));
-        return ResponseEntity
-                .status(ExceptionEnum.INTERNAL_SERVER_ERROR.getStatus())
-                .body(ApiExceptionEntity.builder()
-                        .errorCode(ExceptionEnum.INTERNAL_SERVER_ERROR.getCode())
-                        .message(e.getMessage())
-                        .build());
-    }
-    
-	public String exceptionToString(Exception e) {    
-		StringWriter error = new StringWriter();        
-		e.printStackTrace(new PrintWriter(error));   
+	@ExceptionHandler({ Exception.class })
+	public ResponseEntity<ApiExceptionEntity> exceptionHandler(HttpServletRequest request, final Exception e) {
+		log.error("{\"INT_PROC_ERR500\":{}}", exceptionToString(e));
+		return ResponseEntity.status(ExceptionEnum.INTERNAL_SERVER_ERROR.getStatus()).body(ApiExceptionEntity.builder()
+				.errorCode(ExceptionEnum.INTERNAL_SERVER_ERROR.getCode()).message(e.getMessage()).build());
+	}
+
+	public String exceptionToString(Exception e) {
+		StringWriter error = new StringWriter();
+		e.printStackTrace(new PrintWriter(error));
 		JSONObject obnj = new JSONObject(error);
-		return obnj.toString();            
+		return obnj.toString();
 	}
 }

@@ -33,6 +33,7 @@ import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+
 /**
  * local 및 카카오 사용자를 함께 조회 변경
  * 
@@ -50,10 +51,10 @@ public class UserController {
 	private final RedisUserImpl redisUserImpl;
 
 	/**
-	 * @Method Name  : list
-	 * @작성일   : 2021. 7. 5.
-	 * @작성자   : 조선우
-	 * @변경이력  :
+	 * @Method Name : list
+	 * @작성일 : 2021. 7. 5.
+	 * @작성자 : 조선우
+	 * @변경이력 :
 	 * @Method 설명 :
 	 * @param agerange
 	 * @param domain
@@ -71,13 +72,12 @@ public class UserController {
 			@RequestParam(value = "agerange", required = false, defaultValue = "") String agerange,
 			@RequestParam(value = "domain", required = false, defaultValue = "") String domain,
 			@RequestParam(value = "page", required = false, defaultValue = "") int page,
-			@RequestParam(value = "size", required = false, defaultValue = "10") int size,
-			String sort){
+			@RequestParam(value = "size", required = false, defaultValue = "10") int size, String sort) {
 		Page<UserDto> posts = null;
 		Sort sortordery = Sort.by("id");
-		sortordery = sortOrder(sortordery,sort);
-		Pageable pageable = PageRequest.of(page, size,sortordery);
-		
+		sortordery = sortOrder(sortordery, sort);
+		Pageable pageable = PageRequest.of(page, size, sortordery);
+
 		if ("".equals(domain) && "".equals(agerange)) {
 			posts = userService.findAll(pageable);
 		} else if ("".equals(domain)) {
@@ -89,8 +89,9 @@ public class UserController {
 		}
 		return new ResponseEntity<>(posts, HttpStatus.OK);
 	}
-	private Sort sortOrder(Sort sort,String paramSort) {
-		if(paramSort == null) {
+
+	private Sort sortOrder(Sort sort, String paramSort) {
+		if (paramSort == null) {
 			return sort;
 		}
 		String[] sorts = paramSort.split("-");
@@ -98,54 +99,55 @@ public class UserController {
 			return sort;
 		}
 		sort = sort.unsorted();
-		for(String item : sorts) {
+		for (String item : sorts) {
 			item = item.trim();
 			String data[] = item.split(".");
-			if(data.length == 0 ){
+			if (data.length == 0) {
 				continue;
 			}
-			if(data.length == 1 ){
+			if (data.length == 1) {
 				sort = sort.and(Sort.by(data[0]));
 				continue;
 			}
-			sort =  sort.and(Sort.by(Sort.Direction.fromString(data[1]),data[0]));
+			sort = sort.and(Sort.by(Sort.Direction.fromString(data[1]), data[0]));
 		}
 		return sort;
 	}
 
 	/**
-	 * @Method Name  : update
-	 * @작성일   : 2021. 7. 5.
-	 * @작성자   : 조선우
-	 * @변경이력  :
+	 * @Method Name : update
+	 * @작성일 : 2021. 7. 5.
+	 * @작성자 : 조선우
+	 * @변경이력 :
 	 * @Method 설명 : 사용자 정보중 닉네임을 변경하는 기능
 	 * @param id
 	 * @param userUpdateReqDto
 	 * @return
 	 */
 	@ApiOperation(value = "로컬 Id로 회줭정보 수정", notes = "로컬정만 변경")
-	@ApiImplicitParam(name="id",value="로컬 ID", required = true )
+	@ApiImplicitParam(name = "id", value = "로컬 ID", required = true)
 	@PostMapping("/api/v1/user/{id}")
-	public ResponseEntity<?> update(@PathVariable int id
-			, @RequestBody  @Valid UserUpdateReqDto userUpdateReqDto,BindingResult result) {
-		if(result.hasErrors()){
-			return new ResponseEntity<>(new Message(result.getAllErrors().get(0).getDefaultMessage()), HttpStatus.BAD_REQUEST);
-		}	
+	public ResponseEntity<?> update(@PathVariable int id, @RequestBody @Valid UserUpdateReqDto userUpdateReqDto,
+			BindingResult result) {
+		if (result.hasErrors()) {
+			return new ResponseEntity<>(new Message(result.getAllErrors().get(0).getDefaultMessage()),
+					HttpStatus.BAD_REQUEST);
+		}
 		userService.update(userUpdateReqDto);
 		return new ResponseEntity<>(new Message("update"), HttpStatus.OK);
 	}
 
 	/**
-	 * @Method Name  : deleteId
-	 * @작성일   : 2021. 7. 5.
-	 * @작성자   : 조선우
-	 * @변경이력  :
-	 * @Method 설명 : 사용자 정보를 삭제하는 기능 
+	 * @Method Name : deleteId
+	 * @작성일 : 2021. 7. 5.
+	 * @작성자 : 조선우
+	 * @변경이력 :
+	 * @Method 설명 : 사용자 정보를 삭제하는 기능
 	 * @param id
 	 * @return
 	 */
 	@ApiOperation(value = "로컬 Id로 회원정보 삭제", notes = "카카오 가입자는 연결끊기까지 처리")
-	@ApiImplicitParam(name="id",value="로컬 ID", required = true )
+	@ApiImplicitParam(name = "id", value = "로컬 ID", required = true)
 	@DeleteMapping("/api/v1/user/{id}")
 	public ResponseEntity<?> deleteId(@PathVariable Long id) {
 		User user = userService.findById(id);
@@ -161,11 +163,12 @@ public class UserController {
 		userService.deleteById(id);
 		return new ResponseEntity<>(new Message("delete"), HttpStatus.OK);
 	}
+
 	/**
-	 * @Method Name  : logout
-	 * @작성일   : 2021. 7. 5.
-	 * @작성자   : User1
-	 * @변경이력  :
+	 * @Method Name : logout
+	 * @작성일 : 2021. 7. 5.
+	 * @작성자 : User1
+	 * @변경이력 :
 	 * @Method 설명 :세션Id와 세션을 만료 시는 기능
 	 * @param sessionId 세션의 ID
 	 * @return 로그인 사용자 강제로그아웃 사용자가 같을때 true
@@ -175,16 +178,17 @@ public class UserController {
 		if (session != null && session.getId().equals(sessionId)) {
 			session.removeAttribute("sessionId");
 			session.removeAttribute("sessionUserName");
-			session.invalidate(); //세션의 모든 속성을 삭제
+			session.invalidate(); // 세션의 모든 속성을 삭제
 			return true;
 		}
 		return false;
 	}
+
 	/**
-	 * @Method Name  : getCurrentUserAccount
-	 * @작성일   : 2021. 7. 5.
-	 * @작성자   : User1
-	 * @변경이력  :
+	 * @Method Name : getCurrentUserAccount
+	 * @작성일 : 2021. 7. 5.
+	 * @작성자 : User1
+	 * @변경이력 :
 	 * @Method 설명 : 세션정보를 반환
 	 * @return sessionChk : 값에 따라 세션 생성 여부 결정
 	 */
