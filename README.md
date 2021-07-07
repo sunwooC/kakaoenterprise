@@ -46,9 +46,10 @@
    run_redis_docker: redis 도커 설치  
  
 ## <ol>4.3 구조
-   ![ex_screenshot](image1.png)
-    
- 
+<img src="https://github.com/sunwooC/kakaoenterprise/blob/master/image1.PNG"  width="700" height="370">
    
+   개발 환경 구조는 [그림1]과 같이 구성되고 배포를 위해 만든 환경은
+   
+
    
    
