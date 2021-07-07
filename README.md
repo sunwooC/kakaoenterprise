@@ -34,7 +34,7 @@
 ## <ol>4.2 젠킨스 빌드 
  
    docker pull blueballpen/work:lates  
-   docker run -d -p 8081:8080 5000:5000 -v c:/jenkins:/var/jenkins_home --name jenkins blueballpen/work:latest
+   docker run -d -p 8081:8080 -p 50000:50000 -v //var/run/docker.sock:/var/run/docker.sock -v c:/jenkins:/var/jenkins_home --name jenkins3 blueballpen/work:latest  
 
    #젠킨스 로그인 정보  
     admin / c7f4dd47ae684c0ca17845d568126cae   
