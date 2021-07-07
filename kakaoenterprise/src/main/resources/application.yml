@@ -6,6 +6,7 @@ server:
       charset: utf-8
       enabled: true
 
+   
 kakao: 
   userMeUri: https://kapi.kakao.com/v2/user/me
   userLogoutUri: https://kapi.kakao.com/v1/user/logout

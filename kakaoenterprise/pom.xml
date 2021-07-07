@@ -21,6 +21,14 @@
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
+			
+			   <exclusions>
+		         <!-- log4j2 사용을 위해 내장 Logger 제외 -->
+		        <exclusion>
+		            <groupId>org.springframework.boot</groupId>
+		            <artifactId>spring-boot-starter-logging</artifactId>
+		        </exclusion>
+		    </exclusions>			
 		</dependency>
 		<dependency>
 			<groupId>commons-io</groupId>

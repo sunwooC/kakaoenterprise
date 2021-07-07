@@ -32,7 +32,7 @@
             <AppenderRef ref="File"/>
         </Root>
  
-        <Logger name="com.kakaoenterprise" level="DEBUG" additivity="false">
+        <Logger name="com.kakaoenterprise" level="INFO" additivity="false">
             <AppenderRef ref="Console"/>
             <AppenderRef ref="File"/>
         </Logger>
