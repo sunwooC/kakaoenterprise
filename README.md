@@ -1,4 +1,5 @@
 # 1.문제해결 전략  
+## 1.1 
 
 # 2.환경 설정 
 ## <ol>2.1 mysql 설치 및 설정 
@@ -30,11 +31,10 @@
  docker pull jenkins/jenkins:lts  
  docker run -d -p 8081:8081 -v c:/jenkins:/var/jenkins_home --name jm_jenkins -u root jenkins/jenkins:lts  
 
- ## <ol>4.2 젠킨스에 빌드 
+## <ol>4.2 젠킨스에 빌드 
  
-   docker pull blueballpen/work  
- docker run -itd -p 8081:8080 5000:5000 -v  
-   docker run -d -p 8080:8080 -v c:/jenkins:/var/jenkins_home --name jm_jenkins -u root jenkins/jenkins:lts  
+   docker pull blueballpen/work:lates  
+   docker run -d -p 8081:8080 5000:5000 -v c:/jenkins:/var/jenkins_home --name jenkins blueballpen/work:latest
 
    #젠킨스 로그인 정보  
     admin / c7f4dd47ae684c0ca17845d568126cae   
@@ -44,6 +44,8 @@
    run_maven_docker: maven_test123123에서 빌드된 jar로 도커이미지 생성  
    run_mysql_docker: mysql 도커 설치  
    run_redis_docker: redis 도커 설치  
+ 
+## <ol>4.3 구성
  
    
    
