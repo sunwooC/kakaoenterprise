@@ -31,7 +31,7 @@
  docker pull jenkins/jenkins:lts  
  docker run -d -p 8081:8081 -v c:/jenkins:/var/jenkins_home --name jm_jenkins -u root jenkins/jenkins:lts  
 
-## <ol>4.2 젠킨스에 빌드 
+## <ol>4.2 젠킨스 빌드 
  
    docker pull blueballpen/work:lates  
    docker run -d -p 8081:8080 5000:5000 -v c:/jenkins:/var/jenkins_home --name jenkins blueballpen/work:latest
