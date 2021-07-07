@@ -1,0 +1,16 @@
+# docker image create
+
+USER ?=blueballpen
+PASSWORD ?=remote0219
+
+NS ?= blueballpen
+VERSION ?= app_test
+IMAGE_NAME ?= work
+
+CONTAINER_NAME ?= app_test
+
+# docker run
+PORTS =  -p 18080:8080
+VOLUMES = -v {test}:{test}
+ENV = -e {test}:{test}
+
