@@ -6,9 +6,9 @@ import javax.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.lang.Nullable;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -24,26 +24,15 @@ import com.kakaoenterprise.domain.user.User;
 import com.kakaoenterprise.web.dto.Message;
 import com.kakaoenterprise.web.dto.UserDto;
 import com.kakaoenterprise.web.dto.UserUpdateReqDto;
-import com.kakaoenterprise.web.exception.ExceptionEnum;
 import com.kakaoenterprise.web.service.impl.KakaoServiceImpl;
 import com.kakaoenterprise.web.service.impl.RedisUserImpl;
 import com.kakaoenterprise.web.service.impl.UserServiceImpl;
-import com.sun.istack.NotNull;
-import java.util.ArrayList;
-import java.util.List;
 
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-
-
-import org.springframework.data.web.SortDefault;
-import org.springframework.data.domain.Sort;
-import org.springframework.data.domain.Sort.Direction;
-
-import com.kakaoenterprise.web.exception.ApiException;
 /**
  * local 및 카카오 사용자를 함께 조회 변경
  * 

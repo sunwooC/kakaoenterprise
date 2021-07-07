@@ -26,7 +26,8 @@ public enum ExceptionEnum {
 	NOT_INPUT_USER_NAME(HttpStatus.BAD_REQUEST, "S0006", "UserId는 필수 입니다."),
 	NOT_INPUT_PASSWD(HttpStatus.BAD_REQUEST, "S0007", "비밀번호는 필수 입니다.."),
 	NOT_INPUT_DATA(HttpStatus.BAD_REQUEST, "S0008", "특정 값이 없음"),
-	NOT_KAKO_CODE(HttpStatus.BAD_REQUEST, "S0009", "카카오로 부터 코드를 받지 못함.");
+	NOT_KAKO_CODE(HttpStatus.BAD_REQUEST, "S0009", "카카오로 부터 코드를 받지 못함."),
+	NOT_COMM_ERR(HttpStatus.BAD_REQUEST, "S0010", "런타임 오류 발쌩 즉각 대항");
     
     private final HttpStatus status;
     private final String code;

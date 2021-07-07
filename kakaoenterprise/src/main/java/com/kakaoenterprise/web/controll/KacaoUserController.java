@@ -25,7 +25,6 @@ import com.kakaoenterprise.domain.user.User;
 import com.kakaoenterprise.web.dto.KakaoAuthToken;
 import com.kakaoenterprise.web.dto.Message;
 import com.kakaoenterprise.web.dto.UserUpdateReqDto;
-import com.kakaoenterprise.web.exception.ApiException;
 import com.kakaoenterprise.web.exception.ExceptionEnum;
 import com.kakaoenterprise.web.service.impl.KakaoServiceImpl;
 import com.kakaoenterprise.web.service.impl.RedisUserImpl;
@@ -68,10 +67,10 @@ public class KacaoUserController {
 	 */
 	@ApiOperation(value = "로컬 Id로 카카오 사용자를 조회하는 기능", notes = "Id는 내부 DB정보")
 	@GetMapping("/api/v2/user/me/{id}")
-	public ResponseEntity<?> reqUserInfo(@PathVariable(required = true) Long id) {
+	public ResponseEntity<Message> reqUserInfo(@PathVariable(required = true) Long id) {
 		User user = userServiceImpl.findById(id);
 		if (user == null || !"Kakao".equals(user.getSysid())) {
-			throw new ApiException(ExceptionEnum.NOT_FOUND_USER);
+			return new ResponseEntity<>(new Message(ExceptionEnum.NOT_FOUND_USER.getMessage()), ExceptionEnum.NOT_FOUND_USER.getStatus());
 		}
 		String snsid = user.getUsername().replace("Kakao_", "");
 		ResponseEntity<String> kaKaoUserInfo = kakaoServiceImpl.postUserMeAdmin(snsid);
