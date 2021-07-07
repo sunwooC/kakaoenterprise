@@ -16,6 +16,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 import org.springframework.web.util.ContentCachingRequestWrapper;
+import org.springframework.web.util.ContentCachingResponseWrapper;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -41,7 +42,6 @@ public class LoginCheckInterceptor extends BaseInterceptor {
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
 			throws Exception {
 
-		requstLog(request, response);
 		
 		String suthorization = request.getHeader("Authorization");
 		if ("Bearer sunwoo".equals(suthorization)) {
@@ -62,6 +62,9 @@ public class LoginCheckInterceptor extends BaseInterceptor {
 		}
 
 		if (session == null) {
+	        final ContentCachingRequestWrapper cachingRequest = (ContentCachingRequestWrapper) request;
+	        final ContentCachingResponseWrapper cachingResponse = (ContentCachingResponseWrapper) response;
+			requstLog(cachingRequest, cachingResponse);
 			response.sendRedirect(request.getContextPath() + "/login.html");
 			return false;
 		}

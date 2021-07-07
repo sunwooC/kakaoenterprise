@@ -113,7 +113,7 @@ public class WebLoginController {
 	@ApiOperation(value = "로컨 회원 가입", notes = "신규 가입을 위한 요청 처리")
 	@PostMapping("/api/v1/auth/local/new")
 	public ResponseEntity<Message> join(@RequestBody @Valid AuthJoinReqDto authJoinReqDto, BindingResult result) {
-		if (result.hasErrors()) {
+		if (result.hasErrors()) { 
 			return new ResponseEntity<>(new Message(result.getAllErrors().get(0).getDefaultMessage()),
 					HttpStatus.BAD_REQUEST);
 		}
@@ -188,14 +188,15 @@ public class WebLoginController {
 			throws IOException {
 		ResponseEntity<KakaoAuthToken> reesutl = kakaoUserServiceImpl.postOauthToken(code);
 		if (reesutl.getStatusCode() != HttpStatus.OK) {
-			log.error("[LOGIN.CODE]statusL{},eror:{}", reesutl.getStatusCode(), error);
+			// log.info("[LOGIN.CODE]statusL{},eror:{}", reesutl.getStatusCode(), error);
 			return new ResponseEntity<>(new Message("카카오로부터 CODE를 받지 못함."), HttpStatus.BAD_REQUEST);
 		}
 		KakaoAuthToken tonek = reesutl.getBody();
 		ResponseEntity<KaKaoUserInfo> resUseMe = kakaoUserServiceImpl.postUserMe(tonek);
 		if (resUseMe.getStatusCode() != HttpStatus.OK) {
-			log.error("[LOGIN.UESR_US]statusL{},eror:{}", reesutl.getStatusCode(), error);
-			return new ResponseEntity<>(new Message(ExceptionEnum.NOT_FOUND_USER.getMessage()), ExceptionEnum.NOT_FOUND_USER.getStatus());
+			// log.info("[LOGIN.UESR_US]statusL{},eror:{}", reesutl.getStatusCode(), error);
+			return new ResponseEntity<>(new Message(ExceptionEnum.NOT_FOUND_USER.getMessage()),
+					ExceptionEnum.NOT_FOUND_USER.getStatus());
 
 		}
 		KaKaoUserInfo oAuth2UserInfo = resUseMe.getBody();

@@ -95,7 +95,6 @@ i {
 									<option value="50~59">50대</option>
 									<option value="60~">60대이상</option>
 								</select>
-					     
 				
 							<md-field> 
 								<label for="password">패스원</label> <md-input type="password" v-model="newData.password" @keydown.enter="submit" required /> 
@@ -182,7 +181,7 @@ i {
                     		nickname: this.newData.nickname,
                     		password: this.newData.password,
                     		email: this.newData.email,
-                    		argrange: this.newData.argrange,
+                    		agerange: this.newData.argrange,
                         };
 
     				axios.post('/api/v1/auth/local/new',joinData)

@@ -45,25 +45,7 @@ public class LoggerAspect {
 			stopWatch.start();
 			Object result = proceedingJoinPoint.proceed();
 			stopWatch.stop();
-			try {
-				HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes())
-						.getRequest(); // request 정보를 가져온다.
-
-				JSONObject params = new JSONObject();
-				String controllerName = proceedingJoinPoint.getSignature().getDeclaringType().getSimpleName();
-				String methodName = proceedingJoinPoint.getSignature().getName();
-				params.put("runtime", stopWatch.getTotalTimeMillis());
-				params.put("http_method", request.getMethod());
-				params.put("request_uri", request.getRequestURI());
-				params.put("controller", controllerName);
-				params.put("method", methodName);
-				params.put("params", getParams(request));
-				params.put("heder", geHeader(request));
-				log.info("{'INT_REQ_PROC':'{}' }",params);
-			} catch (Exception e) {
-				log.error("{'INT_LOG':'{}'}", e);
-			}
-
+		
 			return result;
 
 		} catch (Throwable throwable) {
@@ -80,7 +62,7 @@ public class LoggerAspect {
 			params.put("heder", geHeader(request));
 			StringWriter sw = new StringWriter(); throwable.printStackTrace(new PrintWriter(sw));
 			params.put("error", sw.toString());
-			log.error("{'INT_REQ_PROC':'{}' }",params);
+			log.error("{\"INT_REQ_PROC\":'{}' }",params.toJSONString());
 			throw throwable;
 		}
 	}

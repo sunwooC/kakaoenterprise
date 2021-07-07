@@ -25,10 +25,10 @@ import lombok.extern.slf4j.Slf4j;
 @Component
 public class BaseInterceptor extends HandlerInterceptorAdapter{
 	
-	protected void requstLog(HttpServletRequest request, HttpServletResponse response) {
+	protected void requstLog(ContentCachingRequestWrapper request, ContentCachingResponseWrapper response) {
 		UUID logKey = UUID.randomUUID();
 		try {
-			final ContentCachingRequestWrapper cachingRequest = (ContentCachingRequestWrapper) request;
+
 			HttpSession session = request.getSession(false);
 			JSONObject params = new JSONObject();
 			params.put("http_method", request.getMethod());
@@ -46,16 +46,16 @@ public class BaseInterceptor extends HandlerInterceptorAdapter{
 			}
 			params.put("params", getParams(request));
 			params.put("heder", geHeader(request, logKey.toString()));
-			params.put("body", new String(cachingRequest.getContentAsByteArray(), "utf-8"));
-			log.info("{'INT_REQ':{}}", params);
+			params.put("body", new String(request.getContentAsByteArray(), "utf-8"));
+			log.info("{\"INT_REQ\":{}}", params.toJSONString());
 		} catch (Exception ex) {
-			log.error("{'INT_LOG_ERR':{}}", exceptionToString(ex));
+			log.error("{\"INT_LOG_ERR\":{}}", exceptionToString(ex));
 		}
 		response.setHeader("LOGKEY", logKey.toString());
 	}
-	protected void reqposeLog(HttpServletRequest request, HttpServletResponse response) {
+	protected void reqposeLog(ContentCachingRequestWrapper request, ContentCachingResponseWrapper response) {
 		try {
-			final ContentCachingResponseWrapper cachingResponse = (ContentCachingResponseWrapper) response;
+
 			HttpSession session = request.getSession(false);
 			JSONObject params = new JSONObject();
 			params.put("http_method", request.getMethod());
@@ -73,12 +73,12 @@ public class BaseInterceptor extends HandlerInterceptorAdapter{
 				params.put("request_uri", request.getRequestURI());
 			}
 			params.put("params", getParams(request));
-			params.put("body", new String(cachingResponse.getContentAsByteArray(), "utf-8"));
+			params.put("body", new String(response.getContentAsByteArray(), "utf-8"));
 			
-			log.info("{'INT_RES':{}}",params);
+			log.info("{\"INT_RES\":{}}",params.toJSONString());
 			//log.info("{INT_RES: {}", objectMapper.readTree(cachingResponse.getContentAsByteArray()));
 		}catch(Exception ex1) {
-			log.error("'INT_LOG_ERR':{}",exceptionToString(ex1));
+			log.error("{\"INT_LOG_ERR\":{}}",exceptionToString(ex1));
 		}
 	}
 	/**
@@ -106,7 +106,6 @@ public class BaseInterceptor extends HandlerInterceptorAdapter{
 			String val = request.getHeader(name);
 			jsonObject.put(name, val);
 		}
-		jsonObject.put("LOGKEY", logKey);
 		return jsonObject;
 	}
 

@@ -21,10 +21,14 @@ public class Scheduler {
       SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
       Date now = new Date();
       String strDate = sdf.format(now);
-      
-      final String uri = "http://localhost:8080/actuator/health";
+      final String uri = "http://localhost:8082/actuator/health";
       RestTemplate restTemplate = new RestTemplate();
-      String result = restTemplate.getForObject( uri, String.class);
-      log.info("'CHECK':{}",result);
+      try {
+	      String result = restTemplate.getForObject( uri, String.class);
+	      log.info("\"CHECK\":{}",result);
+      }catch(Exception ex) {
+	      log.error("\"ERROR_CHECK\":{}",ex);
+    	  
+      }
    }
 }

@@ -101,7 +101,7 @@ public class KakaoUserServiceImpl {
 		params.add("code", code);
 		HttpEntity<MultiValueMap<String, String>> req = new HttpEntity<>(params, headers);
 		ResponseEntity<KakaoAuthToken> response = rt.exchange(tokenUri, HttpMethod.POST, req, KakaoAuthToken.class);
-		log.info("{}", response.getBody());
+		log.debug("{}", response.getBody());
 		return response;
 	}
 	/**
@@ -120,7 +120,7 @@ public class KakaoUserServiceImpl {
 		headers.add("Authorization", "Bearer " + token.getAccess_token());
 		HttpEntity<MultiValueMap<String, String>> req = new HttpEntity<>(headers);
 		ResponseEntity<KaKaoUserInfo> response = rt.exchange(userMeUri, HttpMethod.POST, req, KaKaoUserInfo.class);
-		log.info("{}", response.getBody());
+		log.debug("{}", response.getBody());
 		return response;
 	}
 }
