@@ -33,11 +33,12 @@
 
 ## <ol>4.2 젠킨스 빌드 환경 구축
  
+   4-1에서 생성한 젠킨스에 도커 및 메이븐 ,Makefile 설치하여 이미지를 도커허브에 반영.
    docker pull blueballpen/work:lates  
    docker run -d -p 8081:8080 -p 50000:50000 -v //var/run/docker.sock:/var/run/docker.sock -v c:/jenkins:/var/jenkins_home --name jenkins3 blueballpen/work:latest  
    #젠킨스 로그인 정보 admin / c7f4dd47ae684c0ca17845d568126cae
 
-   젠키스 내부에 도커 및 메이븐 ,Makefile 설치 후 [그림-1]과 같이 구성
+   젠키스 내부에 후 [그림-1]과 같이 구성
 
    <img src="https://github.com/sunwooC/kakaoenterprise/blob/master/image3.PNG"  width="700" height="370">
 
@@ -55,7 +56,7 @@
 개발 환경 구조는 [그림1]과 같이 구성되고 배포를 위해 만든 환경은
 <img src="https://github.com/sunwooC/kakaoenterprise/blob/master/image2.PNG"  width="700" height="370">
 [그림2]와 같이 구성. 젠킨스내부의 도커도 로컬PC와 공유되지만 app에서는 Redis,Mysql의 IP를  
-  알 수 없어 로컬PC의 IP로 호출해 처리하도록 구성해야 사용 가능합니다.
+   알 수 없어 로컬PC의 IP로 호출해 처리하도록 구성해야 사용 가능합니다.
 
    
    
