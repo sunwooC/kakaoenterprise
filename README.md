@@ -25,6 +25,34 @@
       docker pull mysql:8.0.17  
       docker run -d -p 3306:3306 -e MYSQL_ROOT_PASSWORD=password --name mysql_sample mysql  
       
+      i. mysql database 생성을 위해 접속
+      docker exec -it mysql_sample /bin/bash
+      mysql -u root -p
+      #패스워드 password (도커런시 지정)
+      create database work;
+      
+      ii.테이블 생성(ddl-auto: update이 되어 있어서 안만들어 됨.)
+      USE work;
+      CREATE TABLE `User` (
+            `id` BIGINT(19) NOT NULL AUTO_INCREMENT COMMENT '일련번호',
+            `accessToekn` VARCHAR(60) NULL DEFAULT NULL  COMMENT '엑세스토큰 ',
+            `agegrop` INT(10) NULL DEFAULT NULL COMMENT '나이그룹',
+            `agerange` VARCHAR(6) NULL DEFAULT NULL  COMMENT '연령대',
+            `createDate` DATETIME(6) NULL DEFAULT NULL COMMENT '생성일',
+            `email` VARCHAR(50) NOT NULL COMMENT 'EMAIL',
+            `nickname` VARCHAR(100) NOT NULL  COMMENT '닉네임',
+            `password` VARCHAR(128) NULL DEFAULT NULL  COMMENT '패스워드',
+            `refreshToken` VARCHAR(60) NULL DEFAULT NULL  COMMENT '리플레쉬토큰',
+            `role` VARCHAR(255) NULL DEFAULT NULL COMMENT 'ROLE',
+            `snsid` BIGINT(19) NULL DEFAULT NULL COMMENT '카카오 인련번호',
+            `sysid` VARCHAR(100) NULL DEFAULT NULL COMMENT '시스템id',
+            `username` VARCHAR(100) NOT NULL COMMENT '유저명(로그인id)',
+            PRIMARY KEY (`id`) USING BTREE,
+            UNIQUE INDEX `UK_User` (`username`) USING BTREE
+      )
+      ENGINE=InnoDB
+      ;      
+      
 ## <ol>2.2 redis 설치  
        docker pull redis:alpine  
        docker run -p 6379:6379 --name myredis -vc:/redis:/data -d redis:alpine redis-server --appendonly yes  
