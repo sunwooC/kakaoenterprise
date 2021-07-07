@@ -41,8 +41,7 @@
 
    build_push_docker: 젠킨스가 포함된 도커를 도커서버에 푸쉬  
    maven_test123123: 이번 로그인 프로젝트 빌드  
-   run_maven_docker: maven_test123123에서 빌드된 
-                    jar로 도커이미지 생성 후 실행  
+   run_maven_docker: maven_test123123에서 빌드된  jar로 도커이미지 생성 후 실행  
    run_mysql_docker: mysql 도커 설치  
    run_redis_docker: redis 도커 설치  
  
