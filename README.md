@@ -18,10 +18,15 @@
   
 ## <ol>3.3 실행 
    cd target 
+   
    #db 및 redis 정보가 다르다면  
+   
    #target폴더의 application.yml 파일을 환경에 맞게 수정  
+   
    #spring.datasource.url,username,password  
+   
    #spring.redis.host,port,password  
+   
    #spring.security.oauth2.client.registration.kakao.redirect-uri  
    
    java -jar  kakaoenterpriseproj-0.0.1-SNAPSHOT.jar  
@@ -46,11 +51,11 @@
    <img src="https://github.com/sunwooC/kakaoenterprise/blob/master/image3.PNG"  width="700" height="370">
 
    
-   build_push_docker: 젠킨스가 포함된 도커를 도커허브에 푸쉬(빌드 환경 배포용)  
-   maven_test123123: 이번 로그인 프로젝트 빌드  
-   run_maven_docker: maven_test123123에서 빌드된 jar로 도커이미지 생성 후 실행  
-   run_mysql_docker: mysql 도커 설치  
-   run_redis_docker: redis 도커 설치  
+   1. maven_test123123 : 이번 로그인 프로젝트 메이븐 빌드  
+   2. build_push_docker: maven_test123123에서 빌드된 jar로 도커이미지생성
+   3. run_maven_docker: build_push_docker에서 생성된 도커를 실행 
+   4. run_mysql_docker: mysql 실행 
+   5. run_redis_docker: redis 실행
    
    각 빌드 스크립트는 templates/workspace 아래에 반영
  
