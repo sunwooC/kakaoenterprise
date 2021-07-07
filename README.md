@@ -31,11 +31,14 @@
  docker pull jenkins/jenkins:lts  
  docker run -d -p 8081:8081 -v c:/jenkins:/var/jenkins_home --name jm_jenkins -u root jenkins/jenkins:lts  
 
-## <ol>4.2 젠킨스 빌드 환경 구축
+## <ol>4.2 젠킨스 빌드 환경 구성
  
    4-1에서 생성한 젠킨스에 도커 및 메이븐 ,Makefile 설치하여 이미지를 도커허브에 반영.
+   
    docker pull blueballpen/work:lates  
+
    docker run -d -p 8081:8080 -p 50000:50000 -v //var/run/docker.sock:/var/run/docker.sock -v c:/jenkins:/var/jenkins_home --name jenkins3 blueballpen/work:latest  
+   
    #젠킨스 로그인 정보 admin / c7f4dd47ae684c0ca17845d568126cae
 
    젠키스 내부에 후 [그림-1]과 같이 구성
