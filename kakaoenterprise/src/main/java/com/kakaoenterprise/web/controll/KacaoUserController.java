@@ -86,7 +86,7 @@ public class KacaoUserController {
 	 * @작성일 : 2021. 7. 5.
 	 * @작성자 : 조선우
 	 * @변경이력 :
-	 * @Method 설명 :
+	 * @Method 설명 :사용토큰 갱신
 	 * @param id
 	 * @return
 	 */

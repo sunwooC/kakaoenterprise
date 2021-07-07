@@ -31,7 +31,7 @@ public class RedisUserImpl {
 	 * @작성일 : 2021. 7. 5.
 	 * @작성자 : User1
 	 * @변경이력 :
-	 * @Method 설명 :
+	 * @Method 설명 : 로그인 사사를 찾을 수있도록 키 삽입
 	 * @param username
 	 * @param sessionId
 	 */
@@ -45,7 +45,7 @@ public class RedisUserImpl {
 	 * @작성일 : 2021. 7. 5.
 	 * @작성자 : User1
 	 * @변경이력 :
-	 * @Method 설명 :
+	 * @Method 설명 :로그아웃시 레디스 접속자 리슽트에서 삭제 처리
 	 * @param username
 	 */
 	public String logout(String username) {

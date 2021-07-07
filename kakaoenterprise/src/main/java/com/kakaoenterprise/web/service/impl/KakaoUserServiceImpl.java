@@ -85,7 +85,7 @@ public class KakaoUserServiceImpl {
 	 * @작성일 : 2021. 7. 5.
 	 * @작성자 : User1
 	 * @변경이력 :
-	 * @Method 설명 :
+	 * @Method 설명 :최초 리다이렉트시 code를 통해 키들을 가져오는 기능
 	 * @param code
 	 * @return
 	 */
@@ -109,7 +109,7 @@ public class KakaoUserServiceImpl {
 	 * @작성일 : 2021. 7. 5.
 	 * @작성자 : User1
 	 * @변경이력 :
-	 * @Method 설명 :
+	 * @Method 설명 : 프로필 정보를 가져 오는 기능
 	 * @param token
 	 * @return
 	 */
