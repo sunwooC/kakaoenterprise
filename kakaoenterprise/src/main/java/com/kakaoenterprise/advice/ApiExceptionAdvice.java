@@ -17,6 +17,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.nio.file.AccessDeniedException;
+import java.sql.SQLException;
 
 /**
  * API 예외처리를 위한 공통 예외 Advice

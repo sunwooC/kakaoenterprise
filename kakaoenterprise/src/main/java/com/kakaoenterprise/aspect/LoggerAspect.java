@@ -46,24 +46,29 @@ public class LoggerAspect {
 			Object result = proceedingJoinPoint.proceed();
 			stopWatch.stop();
 
-			return result;
-
-		} catch (Throwable throwable) {
 			HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes())
 					.getRequest(); // request 정보를 가져온다.
-			JSONObject params = new JSONObject();
 			String controllerName = proceedingJoinPoint.getSignature().getDeclaringType().getSimpleName();
 			String methodName = proceedingJoinPoint.getSignature().getName();
-			params.put("http_method", request.getMethod());
+
+			JSONObject params = new JSONObject();
 			params.put("request_uri", request.getRequestURI());
+			params.put("http_method", request.getMethod());
 			params.put("controller", controllerName);
 			params.put("method", methodName);
 			params.put("params", getParams(request));
-			params.put("heder", geHeader(request));
-			StringWriter sw = new StringWriter();
-			throwable.printStackTrace(new PrintWriter(sw));
-			params.put("error", sw.toString());
-			log.error("{\"INT_REQ_PROC\":'{}' }", params.toJSONString());
+			params.put("proctime", stopWatch.getTotalTimeMillis());
+			params.put("log_time", new Date());
+			if (stopWatch.getTotalTimeMillis() > 5 * 1000) {
+				log.warn("\"INT_PROC\": {}", params.toJSONString()); // param에 담긴 정보들을 한번에 로깅한다.
+
+			} else {
+				log.info("\"INT_PROC\" : {}", params.toJSONString()); // param에 담긴 정보들을 한번에 로깅한다.
+			}
+			return result;
+
+		} catch (Throwable throwable) {
+
 			throw throwable;
 		}
 	}

@@ -23,9 +23,9 @@ public class Scheduler {
 		RestTemplate restTemplate = new RestTemplate();
 		try {
 			String result = restTemplate.getForObject(uri, String.class);
-			log.info("\"CHECK\":{}", result);
+			log.info("\"MNR\":{}", result);
 		} catch (Exception ex) {
-			log.error("\"ERROR_CHECK\":{}", ex);
+			log.error("\"MNR\":{}", ex);
 
 		}
 	}

@@ -48,7 +48,7 @@ public class RestTemplateLoggingInterceptor implements ClientHttpRequestIntercep
 			jsonObject.put("body", IOUtils.toString(body, StandardCharsets.UTF_8.name()));
 			jsonObject.put("marker", marker);
 			jsonObject.put("error", e.toString());
-			log.error("{'EXT_REQ_ERR':{}}", e.toString());
+			log.error("{\"EXT_REQ_ERR\":{}}", jsonObject.toJSONString());
 			throw e;
 		}
 		loggingResponse(request, response);
@@ -62,7 +62,7 @@ public class RestTemplateLoggingInterceptor implements ClientHttpRequestIntercep
 		jsonObject.put("heder", request.getHeaders());
 		jsonObject.put("body", IOUtils.toString(body, StandardCharsets.UTF_8.name()));
 		jsonObject.put("marker", marker);
-		log.info("{'INT_REQ':{}}", jsonObject);
+		log.info("{\"EXT_REQ\":{}}", jsonObject.toJSONString());
 	}
 
 	private void loggingResponse(HttpRequest request, ClientHttpResponse response) throws IOException {
@@ -73,7 +73,7 @@ public class RestTemplateLoggingInterceptor implements ClientHttpRequestIntercep
 		jsonObject.put("heder", response.getHeaders());
 		jsonObject.put("body", IOUtils.toString(response.getBody(), StandardCharsets.UTF_8.name()));
 		jsonObject.put("marker", marker);
-		log.info("{'INT_RES':{}}", jsonObject);
+		log.info("{\"EXT_RES\":{}}", jsonObject.toJSONString());
 	}
 
 }
