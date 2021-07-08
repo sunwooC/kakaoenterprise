@@ -83,7 +83,7 @@
       docker pull blueballpen/work:lates  
       docker run -d -p 8081:8080 -p 50000:50000 -v //var/run/docker.sock:/var/run/docker.sock -v c:/jenkins:/var/jenkins_home --name jenkins3 blueballpen/work:latest  
       #젠킨스 로그인 정보 admin / c7f4dd47ae684c0ca17845d568126cae
-      젠키스 내부에 후 [그림-1]과 같이 구성
+      젠키스 내부에 설정하여 [그림-1]과 같이 구성
 <img src="https://github.com/sunwooC/kakaoenterprise/blob/master/image3.PNG"  width="700" height="370">
 
       i. maven_test123123 : 이번 로그인 프로젝트 메이븐 빌드  
