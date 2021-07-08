@@ -438,7 +438,7 @@ i {
        				axios.delete('/api/v1/user/unlink/'+this.selectedData.id)
    					.then(res => {
    						console.log(res);
-   						alert("unlink 사용자 : "+res.data.messag);
+   						alert("unlink 사용자 : "+res.data.message);
    						}
    					)
                		.catch(error => {
